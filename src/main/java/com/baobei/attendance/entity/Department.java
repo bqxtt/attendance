@@ -1,0 +1,14 @@
+package com.baobei.attendance.entity;
+
+import lombok.Data;
+
+/**
+ * @author tcg
+ * @date 2021/4/14
+ */
+@Data
+public class Department {
+    private Long id;
+    private String departmentNo;
+    private String departmentName;
+}

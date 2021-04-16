@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baobei.attendance.wechat.mapper.WeChatUserMapper">
+    <select id="findStudentByStudentNo" resultType="com.baobei.attendance.entity.Student">
+        select * from students where stu_no = #{studentNo}
+    </select>
+
+    <select id="findWeChatUserByOpenId" resultType="com.baobei.attendance.wechat.entity.WeChatUser">
+        select * from wx_users where open_id = #{openId}
+    </select>
+
+    <select id="findStudentByStudentId" resultType="com.baobei.attendance.entity.Student">
+        select * from students where id = #{studentId}
+    </select>
+
+    <insert id="addWeChatUser" parameterType="com.baobei.attendance.wechat.entity.WeChatUser" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into wx_users(open_id,web_user_id,student_id,status)
+        values(#{openId},#{webUserId},#{studentId},#{status})
+    </insert>
+
+    <update id="updateWeChatUserByOpenId" parameterType="com.baobei.attendance.wechat.entity.WeChatUser">
+        update wx_users
+        set student_id = #{studentId}, teacher_id = #{teacherId}, status = #{status}
+        where open_id = #{openId}
+    </update>
+
+</mapper>

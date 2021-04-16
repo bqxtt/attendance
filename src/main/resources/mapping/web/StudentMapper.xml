@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baobei.attendance.web.mapper.StudentMapper">
+    <select id="findStudentsByCondition" parameterType="com.baobei.attendance.model.StudentSearch"
+            resultType="com.baobei.attendance.entity.Student">
+        select *
+        from students
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="findStudentCountByCondition" parameterType="com.baobei.attendance.model.StudentSearch"
+            resultType="java.lang.Integer">
+        select count(*)
+        from students
+    </select>
+
+    <insert id="addStudents" useGeneratedKeys="true" keyProperty="id">
+        <!--        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">-->
+        <!--            select LAST_INSERT_ID()-->
+        <!--        </selectKey>-->
+        insert into students
+        (stu_no,username,sex,class_id,major_id,department_id,dormitory_id,phone,urgent_phone,address,role)
+        values
+        <foreach collection="list" item="student" index="index" separator=",">
+            (#{student.stuNo},#{student.username},#{student.sex},#{student.classId},#{student.majorId},#{student.departmentId},#{student.dormitoryId},#{student.phone},#{student.urgentPhone},#{student.address},#{student.role})
+        </foreach>
+    </insert>
+
+    <delete id="deleteStudents">
+        delete from students
+        where id in
+        <foreach collection="list" item="studentId" index="index" open="(" separator="," close=")">
+            #{studentId}
+        </foreach>
+    </delete>
+
+    <update id="updateStudent">
+        update students
+        <set>
+            <if test="stuNo != null">
+                stu_no = #{stuNo},
+            </if>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="sex != 0">
+                sex = #{sex},
+            </if>
+            <if test="classId != 0">
+                class_id = #{classId},
+            </if>
+            <if test="majorId != 0">
+                major_id = #{majorId},
+            </if>
+            <if test="departmentId != 0">
+                department_id = #{departmentId},
+            </if>
+            <if test="dormitoryId != 0">
+                dormitory_id = #{dormitoryId},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="urgentPhone != null">
+                urgent_phone = #{urgentPhone},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="role != 0">
+                role = #{role},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>
