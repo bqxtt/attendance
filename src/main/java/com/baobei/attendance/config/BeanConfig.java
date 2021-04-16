@@ -1,5 +1,6 @@
 package com.baobei.attendance.config;
 
+import com.baobei.attendance.config.entity.Config;
 import com.baobei.attendance.config.entity.OSSClient;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
@@ -19,5 +20,10 @@ public class BeanConfig {
     @Bean
     public OkHttpClient httpClient() {
         return new OkHttpClient();
+    }
+
+    @Bean(initMethod = "init")
+    public Config config() {
+        return new Config();
     }
 }

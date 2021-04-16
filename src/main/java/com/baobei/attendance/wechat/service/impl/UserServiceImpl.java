@@ -1,6 +1,7 @@
 package com.baobei.attendance.wechat.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baobei.attendance.config.entity.Config;
 import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.model.ReplyStatus;
 import com.baobei.attendance.model.Result;
@@ -32,13 +33,12 @@ import java.util.Objects;
 public class UserServiceImpl implements UserService {
     @Value("${wechat.mini.program.auth-url}")
     private String authUrl;
-    @Value("${wechat.mini.program.app.id}")
-    private String appId;
-    @Value("${wechat.mini.program.app.secret-key}")
-    private String appSecret;
 
     @Autowired
-    OkHttpClient httpClient;
+    private OkHttpClient httpClient;
+
+    @Autowired
+    private Config config;
 
     @Resource(name = "weChatUserMapper")
     WeChatUserMapper weChatUserMapper;
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result getUserOpenId(String userCode) {
-        String url = authUrl + appId + "&secret=" + appSecret + "&js_code=" + userCode + "&grant_type=authorization_code";
+        String url = authUrl + config.getAppId() + "&secret=" + config.getAppSecret() + "&js_code=" + userCode + "&grant_type=authorization_code";
         Result result = new Result();
         final Request request = new Request.Builder()
                 .url(url)
