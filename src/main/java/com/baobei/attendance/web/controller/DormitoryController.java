@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "宿舍管理")
 @RestController
 @RequestMapping("/web")
+@CrossOrigin
 public class DormitoryController {
     @Autowired
     DormitoryService dormitoryService;

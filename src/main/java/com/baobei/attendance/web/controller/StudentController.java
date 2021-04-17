@@ -20,6 +20,7 @@ import java.util.List;
 @Api(tags = "学生管理")
 @RestController
 @RequestMapping("/web")
+@CrossOrigin
 public class StudentController {
     @Autowired
     StudentService studentService;

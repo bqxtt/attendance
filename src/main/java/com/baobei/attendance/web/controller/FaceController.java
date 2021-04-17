@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Api(tags = "人脸库管理")
 @RestController
 @RequestMapping("/web")
+@CrossOrigin
 public class FaceController {
     @Autowired
     FaceService faceService;

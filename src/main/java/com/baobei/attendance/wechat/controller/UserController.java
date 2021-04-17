@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 @Api(tags = "用户接口")
 @RestController("weChatUserController")
 @RequestMapping("/weChat")
+@CrossOrigin
 public class UserController {
 
     @Resource(name = "weChatUserService")

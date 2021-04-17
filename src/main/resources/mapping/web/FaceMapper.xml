@@ -6,7 +6,7 @@
     <insert id="addOrModifyStudentFace" parameterType="com.baobei.attendance.web.entity.Face" useGeneratedKeys="true"
             keyProperty="id">
         insert into faces(student_id, url)
-        values (#{student_id}, #{url})
+        values (#{studentId}, #{url})
         on duplicate key update url = #{url}
     </insert>
 

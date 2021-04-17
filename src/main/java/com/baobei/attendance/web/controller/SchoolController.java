@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "学校信息管理")
 @RestController
 @RequestMapping("/web/school")
+@CrossOrigin
 public class SchoolController {
     @Autowired
     SchoolService schoolService;

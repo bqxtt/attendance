@@ -20,6 +20,7 @@ import javax.annotation.Resource;
 @Api(tags = "用户管理")
 @RestController("webUserController")
 @RequestMapping("/web")
+@CrossOrigin
 public class UserController {
     @Resource(name = "webUserService")
     UserService userService;
