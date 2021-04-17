@@ -1,4 +1,4 @@
-package com.baobei.attendance.wechat.service;
+package com.baobei.attendance.service;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSException;
@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 
 /**
  * @author tcg
@@ -21,16 +20,11 @@ import java.util.Objects;
 public class PhotoUploadService {
     private static final Logger log = LoggerFactory.getLogger(PhotoUploadService.class);
 
-
     @Autowired
     private OSSClient ossClient;
 
 
-    public String upload(MultipartFile file) {
-        long timeStamp = System.currentTimeMillis();
-        String filePath = "test/" +
-                timeStamp +
-                getFileSuffix(Objects.requireNonNull(file.getOriginalFilename()));
+    public String upload(MultipartFile file, String filePath) {
         String url = "";
         InputStream is;
         try {
@@ -41,11 +35,6 @@ public class PhotoUploadService {
             return null;
         }
         return url;
-    }
-
-    private String getFileSuffix(String fileName) {
-        int begin = fileName.indexOf(".");
-        return fileName.substring(begin);
     }
 
 }   

@@ -9,6 +9,7 @@ import com.baobei.attendance.web.mapper.WebUserMapper;
 import com.baobei.attendance.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,59 +45,49 @@ public class UserServiceImpl implements UserService {
         if (existUser != null) {
             result = Result.retFail("该管理员账号已存在");
         } else {
-            try {
-                webUserMapper.addWebUser(user);
-                List<Long> classIds = user.getClassIds();
-                if (classIds != null && classIds.size() > 0) {
-                    webUserMapper.addWebUserManagements(user.getId(), classIds);
-                }
-                List<Class> classes = webUserMapper.findWebUserClasses(classIds);
-                user.setClasses(classes);
-                Map<String, Object> data = new HashMap<>();
-                data.put("user", user);
-                result = Result.retOk("success", data);
-            } catch (Exception e) {
-                result = Result.retFail(e.getMessage());
+            webUserMapper.addWebUser(user);
+            List<Long> classIds = user.getClassIds();
+            if (classIds != null && classIds.size() > 0) {
+                webUserMapper.addWebUserManagements(user.getId(), classIds);
             }
+            List<Class> classes = webUserMapper.findWebUserClasses(classIds);
+            user.setClasses(classes);
+            Map<String, Object> data = new HashMap<>(1);
+            data.put("user", user);
+            result = Result.retOk("success", data);
         }
         return result;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result updateAdmin(Long adminId, WebUser user) {
         Result result;
         if (!adminId.equals(user.getId())) {
             result = Result.retFail("admin id不一致");
         } else {
-            try {
-                webUserMapper.updateWebUser(user);
-                List<Long> classIds = user.getClassIds();
-                if (classIds != null && classIds.size() > 0) {
-                    webUserMapper.deleteWebUserManagements(user.getId());
-                    webUserMapper.addWebUserManagements(user.getId(), classIds);
-                    List<Class> classes = webUserMapper.findWebUserClasses(classIds);
-                    user.setClasses(classes);
-                }
-                Map<String, Object> data = new HashMap<>(1);
-                data.put("user", user);
-                result = Result.retOk("success", data);
-            } catch (Exception e) {
-                result = Result.retFail(e.getMessage());
+            webUserMapper.updateWebUser(user);
+            List<Long> classIds = user.getClassIds();
+            if (classIds != null && classIds.size() > 0) {
+                webUserMapper.deleteWebUserManagements(user.getId());
+                webUserMapper.addWebUserManagements(user.getId(), classIds);
+                List<Class> classes = webUserMapper.findWebUserClasses(classIds);
+                user.setClasses(classes);
             }
+            Map<String, Object> data = new HashMap<>(1);
+            data.put("user", user);
+            result = Result.retOk("success", data);
         }
         return result;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result deleteAdmin(Long adminId) {
         Result result;
-        try {
-            webUserMapper.deleteWebUser(adminId);
-            webUserMapper.deleteWebUserManagements(adminId);
-            result = Result.retOk("success");
-        } catch (Exception e) {
-            result = Result.retFail(e.getMessage());
-        }
+        webUserMapper.deleteWebUser(adminId);
+        webUserMapper.deleteWebUserManagements(adminId);
+        result = Result.retOk("success");
         return result;
     }
 

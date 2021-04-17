@@ -4,6 +4,9 @@ import com.baobei.attendance.entity.Class;
 import com.baobei.attendance.entity.Department;
 import com.baobei.attendance.entity.Major;
 import com.baobei.attendance.model.Result;
+import com.baobei.attendance.model.search.ClassSearch;
+import com.baobei.attendance.model.search.DepartmentSearch;
+import com.baobei.attendance.model.search.MajorSearch;
 import com.baobei.attendance.web.service.SchoolService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,9 +48,9 @@ public class SchoolController {
     }
 
     @ApiOperation("学院列表")
-    @GetMapping("/departments")
-    public ResponseEntity<Result> getDepartments() {
-        Result result = schoolService.getDepartments();
+    @PostMapping("/departments")
+    public ResponseEntity<Result> getDepartments(@RequestBody DepartmentSearch search) {
+        Result result = schoolService.getDepartments(search);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -73,9 +76,9 @@ public class SchoolController {
     }
 
     @ApiOperation("专业列表")
-    @GetMapping("/majors")
-    public ResponseEntity<Result> getMajors() {
-        Result result = schoolService.getMajors();
+    @PostMapping("/majors")
+    public ResponseEntity<Result> getMajors(@RequestBody MajorSearch search) {
+        Result result = schoolService.getMajors(search);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -92,7 +95,7 @@ public class SchoolController {
         Result result = schoolService.updateClass(classId, clazz);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    
+
     @ApiOperation("删除班级")
     @DeleteMapping("/class/{classId}")
     public ResponseEntity<Result> deleteClass(@PathVariable Long classId) {
@@ -101,9 +104,9 @@ public class SchoolController {
     }
 
     @ApiOperation("班级列表")
-    @GetMapping("/classes")
-    public ResponseEntity<Result> getClasses() {
-        Result result = schoolService.getClasses();
+    @PostMapping("/classes")
+    public ResponseEntity<Result> getClasses(@RequestBody ClassSearch search) {
+        Result result = schoolService.getClasses(search);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

@@ -16,6 +16,18 @@
         from students
     </select>
 
+    <select id="findStudentById" parameterType="java.lang.Long" resultType="com.baobei.attendance.entity.Student">
+        select *
+        from students
+        where id = #{id}
+    </select>
+
+    <select id="findStudentByStuNo" parameterType="java.lang.String" resultType="com.baobei.attendance.entity.Student">
+        select *
+        from students
+        where stu_no = #{stuNo}
+    </select>
+
     <insert id="addStudents" useGeneratedKeys="true" keyProperty="id">
         <!--        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">-->
         <!--            select LAST_INSERT_ID()-->
@@ -71,6 +83,9 @@
             </if>
             <if test="role != null">
                 role = #{role},
+            </if>
+            <if test="faceUrl != null">
+                face_url = #{faceUrl},
             </if>
         </set>
         where id = #{id}

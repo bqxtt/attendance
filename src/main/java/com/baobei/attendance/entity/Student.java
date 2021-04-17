@@ -31,4 +31,5 @@ public class Student {
     private Integer role;
     private Integer sex;
     private String address;
+    private String faceUrl;
 }

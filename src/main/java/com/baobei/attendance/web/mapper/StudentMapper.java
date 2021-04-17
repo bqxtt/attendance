@@ -31,6 +31,22 @@ public interface StudentMapper {
     Integer findStudentCountByCondition(StudentSearch search);
 
     /**
+     * id查
+     *
+     * @param id
+     * @return
+     */
+    Student findStudentById(Long id);
+
+    /**
+     * 学号查
+     *
+     * @param stuNo
+     * @return
+     */
+    Student findStudentByStuNo(String stuNo);
+
+    /**
      * 批量添加
      *
      * @param students

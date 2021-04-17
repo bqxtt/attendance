@@ -1,6 +1,5 @@
 package com.baobei.attendance.service;
 
-import com.baobei.attendance.wechat.service.PhotoUploadService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

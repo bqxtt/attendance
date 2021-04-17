@@ -34,21 +34,36 @@ public class UserController {
     @ApiOperation("超管添加管理员")
     @PutMapping("/admin")
     public ResponseEntity<Result> addAdmin(@RequestBody WebUser user) {
-        Result result = userService.addAdmin(user);
+        Result result;
+        try {
+            result = userService.addAdmin(user);
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("修改管理员")
     @PostMapping("/admin/{adminId}")
     public ResponseEntity<Result> updateAdmin(@RequestBody WebUser user, @PathVariable Long adminId) {
-        Result result = userService.updateAdmin(adminId, user);
+        Result result;
+        try {
+            result = userService.updateAdmin(adminId, user);
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("删除管理员")
     @DeleteMapping("/admin/{adminId}")
     public ResponseEntity<Result> deleteAdmin(@PathVariable Long adminId) {
-        Result result = userService.deleteAdmin(adminId);
+        Result result;
+        try {
+            result = userService.deleteAdmin(adminId);
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
