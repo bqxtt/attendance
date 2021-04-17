@@ -1,5 +1,7 @@
 package com.baobei.attendance.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -7,14 +9,24 @@ import lombok.Data;
  * @date 2021/4/14
  */
 @Data
+@ApiModel
 public class Student {
+    @ApiModelProperty(hidden = true)
     private Long id;
     private String stuNo;
     private String username;
     private Long classId;
+    @ApiModelProperty(hidden = true)
+    private Class aClass;
     private Long majorId;
+    @ApiModelProperty(hidden = true)
+    private Major major;
     private Long departmentId;
+    @ApiModelProperty(hidden = true)
+    private Department department;
     private Long dormitoryId;
+    @ApiModelProperty(hidden = true)
+    private Dormitory dormitory;
     private String phone;
     private String urgentPhone;
     private Integer role;

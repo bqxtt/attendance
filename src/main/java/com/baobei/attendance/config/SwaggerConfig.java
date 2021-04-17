@@ -38,7 +38,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.baobei.attendance.wechat.controller"))
                 .paths(PathSelectors.any())
                 .build()
-                .apiInfo(buildApiInfo("雪宝贝的考勤系统 WeChat Api", "哈哈哈 it works1"));
+                .apiInfo(buildApiInfo("雪宝贝的考勤系统 WeChat Api", ""));
     }
 
     private ApiInfo buildApiInfo(String title, String description) {

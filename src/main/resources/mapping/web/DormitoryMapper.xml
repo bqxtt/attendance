@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baobei.attendance.web.mapper.DormitoryMapper">
+    <insert id="addDormitory" parameterType="com.baobei.attendance.entity.Dormitory" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into dormitories(building,room_name,capacity)
+        values(#{building},#{roomName},#{capacity})
+    </insert>
+
+    <update id="updateDormitory" parameterType="com.baobei.attendance.entity.Dormitory">
+        update dormitories
+        <set>
+            <if test="building != null">
+                building = #{building},
+            </if>
+            <if test="room_name != null">
+                room_name = #{roomName},
+            </if>
+            <if test="capacity != null">
+                capacity = #{capacity},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDormitory">
+        delete from dormitories
+        where id = #{id}
+    </delete>
+
+    <select id="findDormitoriesByCondition" parameterType="com.baobei.attendance.model.DormitorySearch"
+            resultType="com.baobei.attendance.entity.Dormitory">
+        select *
+        from dormitories
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="roomName != null">
+                AND room_name = #{roomName}
+            </if>
+            <if test="community != null">
+                AND community = #{community}
+            </if>
+            <if test="building != null">
+                AND building = #{building}
+            </if>
+        </where>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="findDormitoryStudents" parameterType="java.lang.Long" resultType="com.baobei.attendance.entity.Student">
+        select *
+        from students
+        where dormitory_id = #{dormitoryId}
+    </select>
+
+    <select id="findDormitoryCountByCondition" parameterType="com.baobei.attendance.model.DormitorySearch"
+            resultType="java.lang.Integer">
+        select count(*)
+        from dormitories
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="roomName != null">
+                AND room_name = #{roomName}
+            </if>
+            <if test="community != null">
+                AND community = #{community}
+            </if>
+            <if test="building != null">
+                AND building = #{building}
+            </if>
+        </where>
+    </select>
+
+    <select id="findDormitoryById" parameterType="java.lang.Long">
+        select *
+        from dormitories
+        where id = #{dormitoryId}
+    </select>
+
+    <select id="findDormitoryByRoomName" parameterType="java.lang.String">
+        select *
+        from dormitories
+        where room_name = #{roomName}
+    </select>
+</mapper>

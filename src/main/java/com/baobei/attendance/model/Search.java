@@ -1,5 +1,7 @@
 package com.baobei.attendance.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -7,11 +9,14 @@ import lombok.Data;
  * @date 2021/4/15
  */
 @Data
+@ApiModel
 public class Search {
     public static Integer defaultPageSize = 5;
     private Integer pageNo;
     private Integer pageSize;
+    @ApiModelProperty(hidden = true)
     private Integer limit;
+    @ApiModelProperty(hidden = true)
     private Integer offset;
 
     public Integer getLimit() {
