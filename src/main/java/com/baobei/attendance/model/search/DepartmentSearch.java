@@ -1,4 +1,4 @@
-package com.baobei.attendance.model;
+package com.baobei.attendance.model.search;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,23 +11,18 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ClassSearch extends Search {
+public class DepartmentSearch extends Search {
     private Long id;
-    private Long majorId;
-    private String className;
+    private String departmentName;
 
     @Override
     public void normalize() {
         super.normalize();
-        if (id == 0) {
+        if (id == null || id == 0) {
             id = null;
         }
-        if (majorId == 0) {
-            majorId = null;
-        }
-        if ("".equals(className)) {
-            className = null;
+        if ("".equals(departmentName)) {
+            departmentName = null;
         }
     }
-
 }

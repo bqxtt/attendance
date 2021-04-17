@@ -1,4 +1,4 @@
-package com.baobei.attendance.model;
+package com.baobei.attendance.model.search;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +20,7 @@ public class DormitorySearch extends Search {
     @Override
     public void normalize() {
         super.normalize();
-        if (id == 0) {
+        if (id == null || id == 0) {
             id = null;
         }
         if ("".equals(roomName)) {

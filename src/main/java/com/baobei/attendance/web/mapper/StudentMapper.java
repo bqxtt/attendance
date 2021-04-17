@@ -1,7 +1,7 @@
 package com.baobei.attendance.web.mapper;
 
 import com.baobei.attendance.entity.Student;
-import com.baobei.attendance.model.StudentSearch;
+import com.baobei.attendance.model.search.StudentSearch;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 

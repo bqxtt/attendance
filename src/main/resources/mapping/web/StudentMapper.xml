@@ -3,14 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baobei.attendance.web.mapper.StudentMapper">
-    <select id="findStudentsByCondition" parameterType="com.baobei.attendance.model.StudentSearch"
+    <select id="findStudentsByCondition" parameterType="com.baobei.attendance.model.search.StudentSearch"
             resultType="com.baobei.attendance.entity.Student">
         select *
         from students
         limit #{offset},#{limit}
     </select>
 
-    <select id="findStudentCountByCondition" parameterType="com.baobei.attendance.model.StudentSearch"
+    <select id="findStudentCountByCondition" parameterType="com.baobei.attendance.model.search.StudentSearch"
             resultType="java.lang.Integer">
         select count(*)
         from students

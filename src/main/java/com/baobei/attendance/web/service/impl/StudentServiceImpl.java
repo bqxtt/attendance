@@ -3,7 +3,7 @@ package com.baobei.attendance.web.service.impl;
 import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.model.PageInfo;
 import com.baobei.attendance.model.Result;
-import com.baobei.attendance.model.StudentSearch;
+import com.baobei.attendance.model.search.StudentSearch;
 import com.baobei.attendance.web.mapper.StudentMapper;
 import com.baobei.attendance.web.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -11,7 +11,6 @@ import lombok.Data;
 @Data
 @ApiModel
 public class Student {
-    @ApiModelProperty(hidden = true)
     private Long id;
     private String stuNo;
     private String username;

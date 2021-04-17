@@ -1,10 +1,12 @@
 package com.baobei.attendance.web.controller;
 
 import com.baobei.attendance.entity.Dormitory;
-import com.baobei.attendance.model.DormitorySearch;
 import com.baobei.attendance.model.Result;
+import com.baobei.attendance.model.search.DormitorySearch;
 import com.baobei.attendance.web.service.DormitoryService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,8 +53,12 @@ public class DormitoryController {
     }
 
     @ApiOperation("查找宿舍是否存在")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "dormitoryId", value = "宿舍ID", required = false, paramType = "query"),
+            @ApiImplicitParam(name = "roomName", value = "宿舍标识", required = false, paramType = "query")
+    })
     @GetMapping("/dormitory")
-    public ResponseEntity<Result> findDormitory(@RequestParam Long dormitoryId, @RequestParam String roomName) {
+    public ResponseEntity<Result> findDormitory(@RequestParam(required = false) Long dormitoryId, @RequestParam(required = false) String roomName) {
         Result result;
         if (dormitoryId != null) {
             result = dormitoryService.findDormitoryById(dormitoryId);

@@ -1,4 +1,4 @@
-package com.baobei.attendance.model;
+package com.baobei.attendance.model.search;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,4 +12,5 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class StudentSearch extends Search {
+    //todo
 }

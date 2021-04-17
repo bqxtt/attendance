@@ -2,7 +2,7 @@ package com.baobei.attendance.web.service;
 
 import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.model.Result;
-import com.baobei.attendance.model.StudentSearch;
+import com.baobei.attendance.model.search.StudentSearch;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package com.baobei.attendance.web.service;
 
 import com.baobei.attendance.entity.Dormitory;
-import com.baobei.attendance.model.DormitorySearch;
 import com.baobei.attendance.model.Result;
+import com.baobei.attendance.model.search.DormitorySearch;
 
 /**
  * @author tcg

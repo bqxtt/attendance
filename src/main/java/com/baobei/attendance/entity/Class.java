@@ -1,7 +1,6 @@
 package com.baobei.attendance.entity;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -11,7 +10,6 @@ import lombok.Data;
 @Data
 @ApiModel
 public class Class {
-    @ApiModelProperty(hidden = true)
     private Long id;
     private Long majorId;
     private String classNo;

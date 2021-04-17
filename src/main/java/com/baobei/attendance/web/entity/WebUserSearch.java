@@ -1,6 +1,6 @@
 package com.baobei.attendance.web.entity;
 
-import com.baobei.attendance.model.Search;
+import com.baobei.attendance.model.search.Search;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

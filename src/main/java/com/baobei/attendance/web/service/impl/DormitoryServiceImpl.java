@@ -2,9 +2,9 @@ package com.baobei.attendance.web.service.impl;
 
 import com.baobei.attendance.entity.Dormitory;
 import com.baobei.attendance.entity.Student;
-import com.baobei.attendance.model.DormitorySearch;
 import com.baobei.attendance.model.PageInfo;
 import com.baobei.attendance.model.Result;
+import com.baobei.attendance.model.search.DormitorySearch;
 import com.baobei.attendance.web.mapper.DormitoryMapper;
 import com.baobei.attendance.web.service.DormitoryService;
 import org.springframework.beans.factory.annotation.Autowired;

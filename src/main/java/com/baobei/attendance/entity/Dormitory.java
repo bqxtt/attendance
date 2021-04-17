@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 @ApiModel
 public class Dormitory {
-    @ApiModelProperty(hidden = true)
     private Long id;
     private String community;
     private String building;

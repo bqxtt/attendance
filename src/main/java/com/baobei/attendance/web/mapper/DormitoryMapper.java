@@ -2,7 +2,7 @@ package com.baobei.attendance.web.mapper;
 
 import com.baobei.attendance.entity.Dormitory;
 import com.baobei.attendance.entity.Student;
-import com.baobei.attendance.model.DormitorySearch;
+import com.baobei.attendance.model.search.DormitorySearch;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 

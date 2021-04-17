@@ -1,4 +1,4 @@
-package com.baobei.attendance.model;
+package com.baobei.attendance.model.search;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

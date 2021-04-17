@@ -2,7 +2,7 @@ package com.baobei.attendance.web.controller;
 
 import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.model.Result;
-import com.baobei.attendance.model.StudentSearch;
+import com.baobei.attendance.model.search.StudentSearch;
 import com.baobei.attendance.web.service.StudentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -30,7 +30,7 @@
         where id = #{id}
     </delete>
 
-    <select id="findDormitoriesByCondition" parameterType="com.baobei.attendance.model.DormitorySearch"
+    <select id="findDormitoriesByCondition" parameterType="com.baobei.attendance.model.search.DormitorySearch"
             resultType="com.baobei.attendance.entity.Dormitory">
         select *
         from dormitories
@@ -57,7 +57,7 @@
         where dormitory_id = #{dormitoryId}
     </select>
 
-    <select id="findDormitoryCountByCondition" parameterType="com.baobei.attendance.model.DormitorySearch"
+    <select id="findDormitoryCountByCondition" parameterType="com.baobei.attendance.model.search.DormitorySearch"
             resultType="java.lang.Integer">
         select count(*)
         from dormitories
@@ -77,13 +77,14 @@
         </where>
     </select>
 
-    <select id="findDormitoryById" parameterType="java.lang.Long">
+    <select id="findDormitoryById" parameterType="java.lang.Long" resultType="com.baobei.attendance.entity.Dormitory">
         select *
         from dormitories
         where id = #{dormitoryId}
     </select>
 
-    <select id="findDormitoryByRoomName" parameterType="java.lang.String">
+    <select id="findDormitoryByRoomName" parameterType="java.lang.String"
+            resultType="com.baobei.attendance.entity.Dormitory">
         select *
         from dormitories
         where room_name = #{roomName}
