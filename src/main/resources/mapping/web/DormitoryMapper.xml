@@ -15,7 +15,7 @@
             <if test="building != null">
                 building = #{building},
             </if>
-            <if test="room_name != null">
+            <if test="roomName != null">
                 room_name = #{roomName},
             </if>
             <if test="capacity != null">

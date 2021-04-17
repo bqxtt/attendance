@@ -45,19 +45,19 @@
             <if test="username != null">
                 username = #{username},
             </if>
-            <if test="sex != 0">
+            <if test="sex != null">
                 sex = #{sex},
             </if>
-            <if test="classId != 0">
+            <if test="classId != null">
                 class_id = #{classId},
             </if>
-            <if test="majorId != 0">
+            <if test="majorId != null">
                 major_id = #{majorId},
             </if>
-            <if test="departmentId != 0">
+            <if test="departmentId != null">
                 department_id = #{departmentId},
             </if>
-            <if test="dormitoryId != 0">
+            <if test="dormitoryId != null">
                 dormitory_id = #{dormitoryId},
             </if>
             <if test="phone != null">
@@ -69,7 +69,7 @@
             <if test="address != null">
                 address = #{address},
             </if>
-            <if test="role != 0">
+            <if test="role != null">
                 role = #{role},
             </if>
         </set>

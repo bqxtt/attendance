@@ -4,6 +4,9 @@ import com.baobei.attendance.entity.Class;
 import com.baobei.attendance.entity.Department;
 import com.baobei.attendance.entity.Major;
 import com.baobei.attendance.model.Result;
+import com.baobei.attendance.model.search.ClassSearch;
+import com.baobei.attendance.model.search.DepartmentSearch;
+import com.baobei.attendance.model.search.MajorSearch;
 
 /**
  * @author tcg
@@ -38,9 +41,10 @@ public interface SchoolService {
     /**
      * 获取学院
      *
+     * @param search
      * @return
      */
-    Result getDepartments();
+    Result getDepartments(DepartmentSearch search);
 
     /**
      * 增加专业
@@ -70,9 +74,10 @@ public interface SchoolService {
     /**
      * 获取专业
      *
+     * @param search
      * @return
      */
-    Result getMajors();
+    Result getMajors(MajorSearch search);
 
     /**
      * 增加班级
@@ -102,7 +107,8 @@ public interface SchoolService {
     /**
      * 获取班级
      *
+     * @param search
      * @return
      */
-    Result getClasses();
+    Result getClasses(ClassSearch search);
 }
