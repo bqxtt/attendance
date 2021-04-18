@@ -26,7 +26,7 @@ public class UserController {
     UserService userService;
 
     @ApiOperation("获取openId")
-    @PostMapping("/openId")
+    @GetMapping("/openId")
     public ResponseEntity<Result> getUserOpenId(@RequestParam(required = true) String userCode) {
         Result result = userService.getUserOpenId(userCode);
         return new ResponseEntity<>(result, HttpStatus.OK);
