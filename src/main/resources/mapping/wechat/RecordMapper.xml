@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baobei.attendance.wechat.mapper.RecordMapper">
+    <insert id="addStudentRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into records(student_id, record_time, photo_url)
+        values
+        <foreach collection="list" index="index" item="record" separator=",">
+            (#{studentId},#{recordTime},#{photoUrl})
+        </foreach>
+    </insert>
+</mapper>
