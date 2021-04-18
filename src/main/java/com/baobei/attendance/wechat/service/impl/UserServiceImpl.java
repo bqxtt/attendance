@@ -3,7 +3,6 @@ package com.baobei.attendance.wechat.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baobei.attendance.config.entity.Config;
 import com.baobei.attendance.entity.Student;
-import com.baobei.attendance.model.ReplyStatus;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.web.entity.WebUser;
 import com.baobei.attendance.web.mapper.WebUserMapper;
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result getUserOpenId(String userCode) {
         String url = authUrl + config.getAppId() + "&secret=" + config.getAppSecret() + "&js_code=" + userCode + "&grant_type=authorization_code";
-        Result result = new Result();
+        Result result;
         final Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -59,29 +58,27 @@ public class UserServiceImpl implements UserService {
             if (response.isSuccessful()) {
                 String res = JSON.parseObject(Objects.requireNonNull(response.body()).string()).getString("openid");
                 if (res == null) {
-                    result.setMessage("user code error, openid id is null");
-                    result.setStatus(ReplyStatus.FAILED);
+                    result = Result.retFail("user code error, openid id is null");
                 } else {
-                    Map<String, Object> map = new HashMap<>(1);
-                    map.put("openid", res);
-                    result.setMessage("success");
-                    result.setData(map);
+                    Map<String, Object> data = new HashMap<>(1);
+                    data.put("openid", res);
+                    result = Result.retOk(data);
                 }
+            } else {
+                result = Result.retFail("weChat api error, please retry");
             }
         } catch (IOException e) {
-            result.setStatus(ReplyStatus.FAILED);
-            result.setMessage(e.getMessage());
+            result = Result.retFail(e.getMessage());
         }
         return result;
     }
 
     @Override
     public Result bindStudentInfo(String openId, String username, String stuNo) {
-        Result result = new Result();
+        Result result;
         Student student = weChatUserMapper.findStudentByStudentNo(stuNo);
         if (student == null || !student.getUsername().equals(username)) {
-            result.setStatus(ReplyStatus.FAILED);
-            result.setMessage("学生信息不存在");
+            result = Result.retFail("学生信息不存在");
         } else {
             try {
                 WeChatUser user = new WeChatUser();
@@ -91,8 +88,7 @@ public class UserServiceImpl implements UserService {
                 weChatUserMapper.updateWeChatUserByOpenId(user);
                 result = Result.retOk("success");
             } catch (Exception e) {
-                result.setStatus(ReplyStatus.FAILED);
-                result.setMessage(e.getMessage());
+                result = Result.retFail(e.getMessage());
             }
         }
         return result;
@@ -103,8 +99,7 @@ public class UserServiceImpl implements UserService {
         Result result = new Result();
         WebUser user = webUserMapper.findWebUserByAccount(account);
         if (user == null || !user.getPassword().equals(password)) {
-            result.setStatus(ReplyStatus.FAILED);
-            result.setMessage("管理员信息不存在");
+            result = Result.retFail("管理员信息不存在");
         } else {
             try {
                 WeChatUser weChatUser = new WeChatUser();
@@ -114,8 +109,7 @@ public class UserServiceImpl implements UserService {
                 weChatUserMapper.updateWeChatUserByOpenId(weChatUser);
                 result = Result.retOk("success");
             } catch (Exception e) {
-                result.setStatus(ReplyStatus.FAILED);
-                result.setMessage(e.getMessage());
+                result = Result.retFail(e.getMessage());
             }
         }
         return result;
@@ -123,7 +117,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result weChatLogin(String openId) {
-        Result result = new Result();
+        Result result;
         WeChatUser user = weChatUserMapper.findWeChatUserByOpenId(openId);
         if (user == null) {
             user = new WeChatUser();
@@ -137,8 +131,7 @@ public class UserServiceImpl implements UserService {
                 data.put("user", user);
                 result = Result.retOk("login success", data);
             } catch (Exception e) {
-                result.setStatus(ReplyStatus.FAILED);
-                result.setMessage(e.getMessage());
+                result = Result.retFail(e.getMessage());
             }
         } else {
             Integer status = user.getStatus();
