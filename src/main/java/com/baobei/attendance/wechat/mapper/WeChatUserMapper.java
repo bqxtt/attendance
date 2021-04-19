@@ -1,6 +1,7 @@
 package com.baobei.attendance.wechat.mapper;
 
 import com.baobei.attendance.entity.Student;
+import com.baobei.attendance.wechat.entity.StudentInfo;
 import com.baobei.attendance.wechat.entity.WeChatUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
@@ -51,5 +52,13 @@ public interface WeChatUserMapper {
      * @return
      */
     Integer updateWeChatUserByOpenId(WeChatUser user);
+
+    /**
+     * 更新学生信息 （微信端 修改部分）
+     *
+     * @param studentInfo
+     * @return
+     */
+    Integer updateStudentInfo(StudentInfo studentInfo);
 
 }

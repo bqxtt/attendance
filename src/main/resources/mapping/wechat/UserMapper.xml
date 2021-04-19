@@ -35,4 +35,20 @@
         where open_id = #{openId}
     </update>
 
+    <update id="updateStudentInfo" parameterType="com.baobei.attendance.wechat.entity.StudentInfo">
+        update students
+        <set>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="urgentPhone != null">
+                urgent_phone = #{urgentPhone},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
 </mapper>

@@ -1,6 +1,7 @@
 package com.baobei.attendance.wechat.service;
 
 import com.baobei.attendance.model.Result;
+import com.baobei.attendance.wechat.entity.StudentInfo;
 
 /**
  * @author tcg
@@ -43,4 +44,13 @@ public interface UserService {
      * @return
      */
     Result weChatLogin(String openId);
+
+    /**
+     * 更新学生信息（微信端 只能修改一部分）
+     *
+     * @param studentId
+     * @param studentInfo
+     * @return
+     */
+    Result updateStudentInfo(Long studentId, StudentInfo studentInfo);
 }

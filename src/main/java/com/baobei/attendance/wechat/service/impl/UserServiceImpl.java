@@ -9,6 +9,7 @@ import com.baobei.attendance.web.entity.WebUser;
 import com.baobei.attendance.web.mapper.DormitoryMapper;
 import com.baobei.attendance.web.mapper.SchoolMapper;
 import com.baobei.attendance.web.mapper.WebUserMapper;
+import com.baobei.attendance.wechat.entity.StudentInfo;
 import com.baobei.attendance.wechat.entity.UserStatus;
 import com.baobei.attendance.wechat.entity.WeChatUser;
 import com.baobei.attendance.wechat.mapper.WeChatUserMapper;
@@ -20,6 +21,7 @@ import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -177,6 +179,19 @@ public class UserServiceImpl implements UserService {
             Map<String, Object> data = new HashMap<>(1);
             data.put("user", user);
             result = Result.retOk("login success", data);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Result updateStudentInfo(Long studentId, StudentInfo studentInfo) {
+        Result result;
+        if (!studentId.equals(studentInfo.getId())) {
+            result = Result.retFail("学生ID不一致");
+        } else {
+            weChatUserMapper.updateStudentInfo(studentInfo);
+            result = Result.retOk("success");
         }
         return result;
     }

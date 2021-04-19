@@ -2,6 +2,7 @@ package com.baobei.attendance.wechat.controller;
 
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.wechat.entity.StudentAuth;
+import com.baobei.attendance.wechat.entity.StudentInfo;
 import com.baobei.attendance.wechat.entity.TeacherAuth;
 import com.baobei.attendance.wechat.service.UserService;
 import io.swagger.annotations.Api;
@@ -50,6 +51,18 @@ public class UserController {
     @PostMapping("/teacher/bind")
     public ResponseEntity<Result> teacherBind(@RequestBody TeacherAuth teacherAuth) {
         Result result = userService.bindTeacherInfo(teacherAuth.getOpenId(), teacherAuth.getUsername(), teacherAuth.getPassword());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @ApiOperation("修改学生信息")
+    @PostMapping("/student/update/{studentId}")
+    public ResponseEntity<Result> studentUpdate(@RequestBody StudentInfo studentInfo, @PathVariable Long studentId) {
+        Result result;
+        try {
+            result = userService.updateStudentInfo(studentId, studentInfo);
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
