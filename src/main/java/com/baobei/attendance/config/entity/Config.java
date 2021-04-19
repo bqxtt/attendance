@@ -1,8 +1,8 @@
 package com.baobei.attendance.config.entity;
 
+import com.baobei.attendance.config.ConfigMapper;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * @author tcg
@@ -16,12 +16,12 @@ public class Config {
     private String appSecret;
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private ConfigMapper configMapper;
 
     public void init() {
-        ossId = redisTemplate.opsForValue().get("oss_id");
-        ossSecret = redisTemplate.opsForValue().get("oss_secret");
-        appId = redisTemplate.opsForValue().get("app_id");
-        appSecret = redisTemplate.opsForValue().get("app_secret");
+        ossId = configMapper.getConfig("oss_id");
+        ossSecret = configMapper.getConfig("oss_secret");
+        appId = configMapper.getConfig("app_id");
+        appSecret = configMapper.getConfig("app_secret");
     }
 }
