@@ -4,6 +4,7 @@ import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.web.entity.WebUser;
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -20,4 +21,13 @@ public class WeChatUser {
     private Student student;
     private Integer status;
     private Date registerTime;
+    private String registerDate;
+
+    public String getRegisterDate() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        if (registerTime != null) {
+            return formatter.format(registerTime);
+        }
+        return "";
+    }
 }

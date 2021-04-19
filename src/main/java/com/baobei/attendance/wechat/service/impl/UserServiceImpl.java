@@ -91,12 +91,22 @@ public class UserServiceImpl implements UserService {
             result = Result.retFail("学生信息不存在");
         } else {
             try {
-                WeChatUser user = new WeChatUser();
-                user.setOpenId(openId);
+                WeChatUser user = weChatUserMapper.findWeChatUserByOpenId(openId);
                 user.setStudentId(student.getId());
                 user.setStatus(UserStatus.STUDENT.ordinal());
                 weChatUserMapper.updateWeChatUserByOpenId(user);
-                result = Result.retOk("success");
+                Department department = schoolMapper.findDepartmentById(student.getDepartmentId());
+                Major major = schoolMapper.findMajorById(student.getMajorId());
+                Class clazz = schoolMapper.findClassById(student.getClassId());
+                Dormitory dormitory = dormitoryMapper.findDormitoryById(student.getDormitoryId());
+                student.setDormitory(dormitory);
+                student.setAClass(clazz);
+                student.setMajor(major);
+                student.setDepartment(department);
+                Map<String, Object> data = new HashMap<>(1);
+                user.setStudent(student);
+                data.put("user", user);
+                result = Result.retOk(data);
             } catch (Exception e) {
                 result = Result.retFail(e.getMessage());
             }
@@ -112,12 +122,15 @@ public class UserServiceImpl implements UserService {
             result = Result.retFail("管理员信息不存在");
         } else {
             try {
-                WeChatUser weChatUser = new WeChatUser();
+                WeChatUser weChatUser = weChatUserMapper.findWeChatUserByOpenId(openId);
                 weChatUser.setStatus(UserStatus.TEACHER.ordinal());
                 weChatUser.setWebUserId(user.getId());
                 weChatUser.setOpenId(openId);
                 weChatUserMapper.updateWeChatUserByOpenId(weChatUser);
-                result = Result.retOk("success");
+                Map<String, Object> data = new HashMap<>(1);
+                weChatUser.setWebUser(user);
+                data.put("user", weChatUser);
+                result = Result.retOk(data);
             } catch (Exception e) {
                 result = Result.retFail(e.getMessage());
             }
