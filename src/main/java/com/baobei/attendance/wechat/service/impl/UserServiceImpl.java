@@ -2,9 +2,12 @@ package com.baobei.attendance.wechat.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baobei.attendance.config.entity.Config;
-import com.baobei.attendance.entity.Student;
+import com.baobei.attendance.entity.Class;
+import com.baobei.attendance.entity.*;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.web.entity.WebUser;
+import com.baobei.attendance.web.mapper.DormitoryMapper;
+import com.baobei.attendance.web.mapper.SchoolMapper;
 import com.baobei.attendance.web.mapper.WebUserMapper;
 import com.baobei.attendance.wechat.entity.UserStatus;
 import com.baobei.attendance.wechat.entity.WeChatUser;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -44,6 +48,12 @@ public class UserServiceImpl implements UserService {
 
     @Resource(name = "webUserMapper")
     WebUserMapper webUserMapper;
+
+    @Autowired
+    SchoolMapper schoolMapper;
+
+    @Autowired
+    DormitoryMapper dormitoryMapper;
 
     @Override
     public Result getUserOpenId(String userCode) {
@@ -96,7 +106,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result bindTeacherInfo(String openId, String account, String password) {
-        Result result = new Result();
+        Result result;
         WebUser user = webUserMapper.findWebUserByAccount(account);
         if (user == null || !user.getPassword().equals(password)) {
             result = Result.retFail("管理员信息不存在");
@@ -125,6 +135,7 @@ public class UserServiceImpl implements UserService {
             user.setWebUserId(0L);
             user.setStatus(UserStatus.UNBIND.ordinal());
             user.setStudentId(0L);
+            user.setRegisterTime(new Date());
             try {
                 weChatUserMapper.addWeChatUser(user);
                 Map<String, Object> data = new HashMap<>(1);
@@ -137,6 +148,14 @@ public class UserServiceImpl implements UserService {
             Integer status = user.getStatus();
             if (status == UserStatus.STUDENT.ordinal()) {
                 Student student = weChatUserMapper.findStudentByStudentId(user.getStudentId());
+                Department department = schoolMapper.findDepartmentById(student.getDepartmentId());
+                Major major = schoolMapper.findMajorById(student.getMajorId());
+                Class clazz = schoolMapper.findClassById(student.getClassId());
+                Dormitory dormitory = dormitoryMapper.findDormitoryById(student.getDormitoryId());
+                student.setDepartment(department);
+                student.setMajor(major);
+                student.setAClass(clazz);
+                student.setDormitory(dormitory);
                 user.setStudent(student);
             } else if (status == UserStatus.TEACHER.ordinal()) {
                 WebUser teacher = webUserMapper.findWebUserByWebUserId(user.getWebUserId());

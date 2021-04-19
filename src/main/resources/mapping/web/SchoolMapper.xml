@@ -177,6 +177,18 @@
             <if test="className != null">
                 AND class_name = #{className}
             </if>
+            <if test="departmentIds != null">
+                AND department_id in
+                <foreach collection="departmentIds" item="did" index="index" open="(" separator="," close=")">
+                    #{did}
+                </foreach>
+            </if>
+            <if test="majorIds != null">
+                AND major_id in
+                <foreach collection="majorIds" item="mid" index="index" open="(" separator="," close=")">
+                    #{mid}
+                </foreach>
+            </if>
         </where>
     </select>
 
@@ -184,5 +196,42 @@
         select *
         from classes
         where id = #{id}
+    </select>
+
+    <select id="findAllDepartments" resultType="com.baobei.attendance.entity.Department">
+        select *
+        from departments;
+    </select>
+
+    <select id="findMajorsByDepartmentId" resultType="com.baobei.attendance.entity.Major">
+        select *
+        from majors
+        where department_id = #{departmentId}
+    </select>
+
+    <select id="findClassesByMajorId" resultType="com.baobei.attendance.entity.Class">
+        select *
+        from classes
+        where major_id = #{majorId}
+    </select>
+
+    <select id="findDepartmentIdsByName" resultType="java.lang.Long">
+        select id
+        from departments
+        <where>
+            <if test="departmentName != null">
+                department_name like concat('%', #{departmentName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="findMajorIdsByName" resultType="java.lang.Long">
+        select id
+        from majors
+        <where>
+            <if test="majorName != null">
+                major_name like concat('%', #{majorName}, '%')
+            </if>
+        </where>
     </select>
 </mapper>

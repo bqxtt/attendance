@@ -72,6 +72,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public Result getDepartments(DepartmentSearch search) {
+        search.normalize();
         Result result;
         try {
             Integer count = schoolMapper.findDepartmentCountByCondition(search);
@@ -133,6 +134,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public Result getMajors(MajorSearch search) {
+        search.normalize();
         Result result;
         try {
             Integer count = schoolMapper.findMajorCountByCondition(search);
@@ -194,8 +196,21 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public Result getClasses(ClassSearch search) {
+        search.normalize();
         Result result;
         try {
+            if (search.getDepartmentName() != null) {
+                search.setDepartmentIds(schoolMapper.findDepartmentIdsByName(search.getDepartmentName()));
+                if (search.getDepartmentIds() != null && search.getDepartmentIds().size() == 0) {
+                    search.setDepartmentIds(null);
+                }
+            }
+            if (search.getMajorName() != null) {
+                search.setMajorIds(schoolMapper.findMajorIdsByName(search.getMajorName()));
+                if (search.getMajorIds() != null && search.getMajorIds().size() == 0) {
+                    search.setMajorIds(null);
+                }
+            }
             Integer count = schoolMapper.findClassCountByCondition(search);
             List<Class> classes = schoolMapper.findClassesByCondition(search);
             PageInfo pageInfo = PageInfo.getPageInfo(count, search.getPageSize());
@@ -206,6 +221,24 @@ public class SchoolServiceImpl implements SchoolService {
         } catch (Exception e) {
             result = Result.retFail(e.getMessage());
         }
+        return result;
+    }
+
+    @Override
+    public Result getSchoolAll() {
+        Result result;
+        List<Department> departments = schoolMapper.findAllDepartments();
+        for (Department department : departments) {
+            List<Major> majors = schoolMapper.findMajorsByDepartmentId(department.getId());
+            for (Major major : majors) {
+                List<Class> classes = schoolMapper.findClassesByMajorId(major.getId());
+                major.setClasses(classes);
+            }
+            department.setMajors(majors);
+        }
+        Map<String, Object> data = new HashMap<>(1);
+        data.put("all", departments);
+        result = Result.retOk(data);
         return result;
     }
 }

@@ -110,4 +110,11 @@ public class SchoolController {
         Result result = schoolService.getClasses(search);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @ApiOperation("所有")
+    @GetMapping("/all")
+    public ResponseEntity<Result> getAll() {
+        Result result = schoolService.getSchoolAll();
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

@@ -1,7 +1,10 @@
 package com.baobei.attendance.entity;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author tcg
@@ -14,4 +17,6 @@ public class Major {
     private Long departmentId;
     private String majorNo;
     private String majorName;
+    @ApiModelProperty(hidden = true)
+    private List<Class> classes;
 }

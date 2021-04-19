@@ -23,8 +23,8 @@
 
     <insert id="addWeChatUser" parameterType="com.baobei.attendance.wechat.entity.WeChatUser" useGeneratedKeys="true"
             keyProperty="id">
-        insert into wx_users(open_id, web_user_id, student_id, status)
-        values (#{openId}, #{webUserId}, #{studentId}, #{status})
+        insert into wx_users(open_id, web_user_id, student_id, status, register_time)
+        values (#{openId}, #{webUserId}, #{studentId}, #{status}, #{registerTime})
     </insert>
 
     <update id="updateWeChatUserByOpenId" parameterType="com.baobei.attendance.wechat.entity.WeChatUser">

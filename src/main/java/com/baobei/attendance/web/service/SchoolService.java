@@ -111,4 +111,11 @@ public interface SchoolService {
      * @return
      */
     Result getClasses(ClassSearch search);
+
+    /**
+     * 获取学院专业班级所有信息
+     *
+     * @return
+     */
+    Result getSchoolAll();
 }

@@ -4,6 +4,8 @@ import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.web.entity.WebUser;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author tcg
  * @date 2021/4/14
@@ -17,4 +19,5 @@ public class WeChatUser {
     private Long studentId;
     private Student student;
     private Integer status;
+    private Date registerTime;
 }
