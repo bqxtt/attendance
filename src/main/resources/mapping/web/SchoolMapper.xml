@@ -162,6 +162,18 @@
             <if test="className != null">
                 AND class_name = #{className}
             </if>
+            <if test="departmentIds != null">
+                AND department_id in
+                <foreach collection="departmentIds" item="did" index="index" open="(" separator="," close=")">
+                    #{did}
+                </foreach>
+            </if>
+            <if test="majorIds != null">
+                AND major_id in
+                <foreach collection="majorIds" item="mid" index="index" open="(" separator="," close=")">
+                    #{mid}
+                </foreach>
+            </if>
         </where>
         limit #{offset},#{limit}
     </select>
