@@ -28,10 +28,10 @@ public class Search {
     }
 
     public void normalize() {
-        if (this.pageNo < 1) {
+        if (this.pageNo == null || this.pageNo < 1) {
             this.pageNo = 1;
         }
-        if (this.pageSize < 1) {
+        if (this.pageSize == null || this.pageSize < 1) {
             this.pageSize = defaultPageSize;
         }
     }
