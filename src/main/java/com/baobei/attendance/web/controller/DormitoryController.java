@@ -26,14 +26,14 @@ public class DormitoryController {
     DormitoryService dormitoryService;
 
     @ApiOperation("添加宿舍")
-    @PutMapping("/dormitory")
+    @PostMapping("/dormitory")
     public ResponseEntity<Result> addDormitory(@RequestBody Dormitory dormitory) {
         Result result = dormitoryService.addDormitory(dormitory);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("修改宿舍")
-    @PostMapping("/dormitory/{dormitoryId}")
+    @PutMapping("/dormitory/{dormitoryId}")
     public ResponseEntity<Result> updateDormitory(@RequestBody Dormitory dormitory, @PathVariable Long dormitoryId) {
         Result result = dormitoryService.updateDormitory(dormitoryId, dormitory);
         return new ResponseEntity<>(result, HttpStatus.OK);

@@ -28,14 +28,14 @@ public class SchoolController {
     SchoolService schoolService;
 
     @ApiOperation("增加学院")
-    @PutMapping("/department")
+    @PostMapping("/department")
     public ResponseEntity<Result> addDepartment(@RequestBody Department department) {
         Result result = schoolService.addDepartment(department);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("修改学院")
-    @PostMapping("/department/{departmentId}")
+    @PutMapping("/department/{departmentId}")
     public ResponseEntity<Result> updateDepartment(@PathVariable Long departmentId, @RequestBody Department department) {
         Result result = schoolService.updateDepartment(departmentId, department);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -56,14 +56,14 @@ public class SchoolController {
     }
 
     @ApiOperation("增加专业")
-    @PutMapping("/major")
+    @PostMapping("/major")
     public ResponseEntity<Result> addMajor(@RequestBody Major major) {
         Result result = schoolService.addMajor(major);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("修改专业")
-    @PostMapping("/major/{majorId}")
+    @PutMapping("/major/{majorId}")
     public ResponseEntity<Result> updateMajor(@PathVariable Long majorId, @RequestBody Major major) {
         Result result = schoolService.updateMajor(majorId, major);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -84,14 +84,14 @@ public class SchoolController {
     }
 
     @ApiOperation("增加班级")
-    @PutMapping("/class")
+    @PostMapping("/class")
     public ResponseEntity<Result> addClass(@RequestBody Class clazz) {
         Result result = schoolService.addClass(clazz);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("修改班级")
-    @PostMapping("/class/{classId}")
+    @PutMapping("/class/{classId}")
     public ResponseEntity<Result> updateClass(@PathVariable Long classId, @RequestBody Class clazz) {
         Result result = schoolService.updateClass(classId, clazz);
         return new ResponseEntity<>(result, HttpStatus.OK);

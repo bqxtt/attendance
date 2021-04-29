@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @ApiOperation("超管添加管理员")
-    @PutMapping("/admin")
+    @PostMapping("/admin")
     public ResponseEntity<Result> addAdmin(@RequestBody WebUser user) {
         Result result;
         try {
@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @ApiOperation("修改管理员")
-    @PostMapping("/admin/{adminId}")
+    @PutMapping("/admin/{adminId}")
     public ResponseEntity<Result> updateAdmin(@RequestBody WebUser user, @PathVariable Long adminId) {
         Result result;
         try {

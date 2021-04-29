@@ -23,7 +23,7 @@ public class FaceController {
     FaceService faceService;
 
     @ApiOperation("上传或更新人脸图片")
-    @PostMapping("/face/{studentId}")
+    @PutMapping("/face/{studentId}")
     public ResponseEntity<Result> uploadFace(@PathVariable Long studentId, @RequestParam("face") MultipartFile faceFile) {
         Result result;
         try {

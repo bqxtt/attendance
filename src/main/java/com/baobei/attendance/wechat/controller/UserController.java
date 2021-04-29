@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @ApiOperation("修改学生信息")
-    @PostMapping("/student/update/{studentId}")
+    @PutMapping("/student/update/{studentId}")
     public ResponseEntity<Result> studentUpdate(@RequestBody StudentInfo studentInfo, @PathVariable Long studentId) {
         Result result;
         try {

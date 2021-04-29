@@ -26,14 +26,14 @@ public class StudentController {
     StudentService studentService;
 
     @ApiOperation("批量添加学生")
-    @PutMapping("/student")
+    @PostMapping("/student")
     public ResponseEntity<Result> addStudents(@RequestBody List<Student> students) {
         Result result = studentService.batchSaveStudent(students);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation("修改学生信息")
-    @PostMapping("/student/{studentId}")
+    @PutMapping("/student/{studentId}")
     public ResponseEntity<Result> updateStudent(@RequestBody Student student, @PathVariable Long studentId) {
         Result result = studentService.updateStudent(studentId, student);
         return new ResponseEntity<>(result, HttpStatus.OK);
