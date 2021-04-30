@@ -1,7 +1,8 @@
 package com.baobei.attendance.config;
 
-import com.baobei.attendance.config.entity.Config;
-import com.baobei.attendance.config.entity.OSSClient;
+import com.baobei.attendance.config.bean.Config;
+import com.baobei.attendance.config.bean.OSSClient;
+import com.baobei.attendance.config.bean.SpringContextUtil;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,5 +26,10 @@ public class BeanConfig {
     @Bean(initMethod = "init")
     public Config config() {
         return new Config();
+    }
+
+    @Bean
+    public SpringContextUtil springContextUtil() {
+        return new SpringContextUtil();
     }
 }

@@ -1,7 +1,8 @@
 package com.baobei.attendance.wechat.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.baobei.attendance.config.entity.Config;
+import com.baobei.attendance.config.bean.Config;
+import com.baobei.attendance.config.bean.WeChatConfig;
 import com.baobei.attendance.entity.Class;
 import com.baobei.attendance.entity.*;
 import com.baobei.attendance.model.Result;
@@ -59,7 +60,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result getUserOpenId(String userCode) {
-        String url = authUrl + config.getAppId() + "&secret=" + config.getAppSecret() + "&js_code=" + userCode + "&grant_type=authorization_code";
+        WeChatConfig weChatConfig = config.getWeChatConfig();
+        String url = authUrl + weChatConfig.getAppId() + "&secret=" + weChatConfig.getAppSecret() + "&js_code=" + userCode + "&grant_type=authorization_code";
         Result result;
         final Request request = new Request.Builder()
                 .url(url)

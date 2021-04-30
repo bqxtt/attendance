@@ -2,7 +2,7 @@ package com.baobei.attendance.service;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSException;
-import com.baobei.attendance.config.entity.OSSClient;
+import com.baobei.attendance.config.bean.OSSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.baobei.attendance.config.entity;
+package com.baobei.attendance.config.bean;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
@@ -25,7 +25,8 @@ public class OSSClient {
     private Config config;
 
     void init() {
-        ossClient = new OSSClientBuilder().build("https://" + endpoint, config.getOssId(), config.getOssSecret());
+        OSSConfig ossConfig = config.getOssConfig();
+        ossClient = new OSSClientBuilder().build("https://" + endpoint, ossConfig.getOssId(), ossConfig.getOssSecret());
     }
 
     void destroy() {
