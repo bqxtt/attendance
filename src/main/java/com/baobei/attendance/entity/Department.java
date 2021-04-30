@@ -1,7 +1,6 @@
 package com.baobei.attendance.entity;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -13,9 +12,6 @@ import java.util.List;
 @Data
 @ApiModel
 public class Department {
-    private Long id;
-    private String departmentNo;
     private String departmentName;
-    @ApiModelProperty(hidden = true)
     private List<Major> majors;
 }

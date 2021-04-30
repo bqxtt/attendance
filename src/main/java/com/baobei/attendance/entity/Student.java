@@ -17,12 +17,10 @@ public class Student {
     private Long classId;
     @ApiModelProperty(hidden = true)
     private Class aClass;
-    private Long majorId;
     @ApiModelProperty(hidden = true)
-    private Major major;
-    private Long departmentId;
+    private String departmentName;
     @ApiModelProperty(hidden = true)
-    private Department department;
+    private String majorName;
     private Long dormitoryId;
     @ApiModelProperty(hidden = true)
     private Dormitory dormitory;

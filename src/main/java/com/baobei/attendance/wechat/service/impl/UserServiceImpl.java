@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.baobei.attendance.config.bean.Config;
 import com.baobei.attendance.config.bean.WeChatConfig;
 import com.baobei.attendance.entity.Class;
-import com.baobei.attendance.entity.*;
+import com.baobei.attendance.entity.Dormitory;
+import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.web.entity.WebUser;
 import com.baobei.attendance.web.mapper.DormitoryMapper;
@@ -97,16 +98,12 @@ public class UserServiceImpl implements UserService {
             try {
                 WeChatUser user = weChatUserMapper.findWeChatUserByOpenId(openId);
                 user.setStudentId(student.getId());
-                user.setStatus(UserStatus.STUDENT.ordinal());
+                user.setStatus(UserStatus.STUDENT.getCode());
                 weChatUserMapper.updateWeChatUserByOpenId(user);
-                Department department = schoolMapper.findDepartmentById(student.getDepartmentId());
-                Major major = schoolMapper.findMajorById(student.getMajorId());
                 Class clazz = schoolMapper.findClassById(student.getClassId());
                 Dormitory dormitory = dormitoryMapper.findDormitoryById(student.getDormitoryId());
                 student.setDormitory(dormitory);
                 student.setAClass(clazz);
-                student.setMajor(major);
-                student.setDepartment(department);
                 Map<String, Object> data = new HashMap<>(1);
                 user.setStudent(student);
                 data.put("user", user);
@@ -150,7 +147,7 @@ public class UserServiceImpl implements UserService {
             user = new WeChatUser();
             user.setOpenId(openId);
             user.setWebUserId(0L);
-            user.setStatus(UserStatus.UNBIND.ordinal());
+            user.setStatus(UserStatus.UNBIND.getCode());
             user.setStudentId(0L);
             user.setRegisterTime(new Date());
             try {
@@ -163,18 +160,14 @@ public class UserServiceImpl implements UserService {
             }
         } else {
             Integer status = user.getStatus();
-            if (status == UserStatus.STUDENT.ordinal()) {
+            if (status.equals(UserStatus.STUDENT.getCode())) {
                 Student student = weChatUserMapper.findStudentByStudentId(user.getStudentId());
-                Department department = schoolMapper.findDepartmentById(student.getDepartmentId());
-                Major major = schoolMapper.findMajorById(student.getMajorId());
                 Class clazz = schoolMapper.findClassById(student.getClassId());
                 Dormitory dormitory = dormitoryMapper.findDormitoryById(student.getDormitoryId());
-                student.setDepartment(department);
-                student.setMajor(major);
                 student.setAClass(clazz);
                 student.setDormitory(dormitory);
                 user.setStudent(student);
-            } else if (status == UserStatus.TEACHER.ordinal()) {
+            } else if (status.equals(UserStatus.TEACHER.getCode())) {
                 WebUser teacher = webUserMapper.findWebUserByWebUserId(user.getWebUserId());
                 user.setWebUser(teacher);
             }

@@ -1,13 +1,9 @@
 package com.baobei.attendance.web.service.impl;
 
 import com.baobei.attendance.entity.Class;
-import com.baobei.attendance.entity.Department;
-import com.baobei.attendance.entity.Major;
 import com.baobei.attendance.model.PageInfo;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.model.search.ClassSearch;
-import com.baobei.attendance.model.search.DepartmentSearch;
-import com.baobei.attendance.model.search.MajorSearch;
 import com.baobei.attendance.web.mapper.SchoolMapper;
 import com.baobei.attendance.web.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,130 +21,6 @@ import java.util.Map;
 public class SchoolServiceImpl implements SchoolService {
     @Autowired
     SchoolMapper schoolMapper;
-
-    @Override
-    public Result addDepartment(Department department) {
-        Result result;
-        try {
-            schoolMapper.addDepartment(department);
-            Map<String, Object> data = new HashMap<>(1);
-            data.put("department", department);
-            result = Result.retOk("success", data);
-        } catch (Exception e) {
-            result = Result.retFail(e.getMessage());
-        }
-        return result;
-    }
-
-    @Override
-    public Result updateDepartment(Long departmentId, Department department) {
-        Result result;
-        if (!departmentId.equals(department.getId())) {
-            result = Result.retFail("department id不一致");
-        } else {
-            try {
-                schoolMapper.updateDepartment(department);
-                Map<String, Object> data = new HashMap<>(1);
-                data.put("department", department);
-                result = Result.retOk("success", data);
-            } catch (Exception e) {
-                result = Result.retFail(e.getMessage());
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public Result deleteDepartment(Long departmentId) {
-        Result result;
-        try {
-            schoolMapper.deleteDepartmentById(departmentId);
-            result = Result.retOk("success");
-        } catch (Exception e) {
-            result = Result.retFail(e.getMessage());
-        }
-        return result;
-    }
-
-    @Override
-    public Result getDepartments(DepartmentSearch search) {
-        search.normalize();
-        Result result;
-        try {
-            Integer count = schoolMapper.findDepartmentCountByCondition(search);
-            List<Department> departments = schoolMapper.findDepartmentsByCondition(search);
-            PageInfo pageInfo = PageInfo.getPageInfo(count, search.getPageSize());
-            Map<String, Object> data = new HashMap<>(2);
-            data.put("pageInfo", pageInfo);
-            data.put("departments", departments);
-            result = Result.retOk("success", data);
-        } catch (Exception e) {
-            result = Result.retFail(e.getMessage());
-        }
-        return result;
-    }
-
-    @Override
-    public Result addMajor(Major major) {
-        Result result;
-        try {
-            schoolMapper.addMajor(major);
-            Map<String, Object> data = new HashMap<>(1);
-            data.put("major", major);
-            result = Result.retOk("success", data);
-        } catch (Exception e) {
-            result = Result.retFail(e.getMessage());
-        }
-        return result;
-    }
-
-    @Override
-    public Result updateMajor(Long majorId, Major major) {
-        Result result;
-        if (!majorId.equals(major.getId())) {
-            result = Result.retFail("major id不一致");
-        } else {
-            try {
-                schoolMapper.updateMajor(major);
-                Map<String, Object> data = new HashMap<>(1);
-                data.put("major", major);
-                result = Result.retOk("success", data);
-            } catch (Exception e) {
-                result = Result.retFail(e.getMessage());
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public Result deleteMajor(Long majorId) {
-        Result result;
-        try {
-            schoolMapper.deleteMajorById(majorId);
-            result = Result.retOk("success");
-        } catch (Exception e) {
-            result = Result.retFail(e.getMessage());
-        }
-        return result;
-    }
-
-    @Override
-    public Result getMajors(MajorSearch search) {
-        search.normalize();
-        Result result;
-        try {
-            Integer count = schoolMapper.findMajorCountByCondition(search);
-            List<Major> majors = schoolMapper.findMajorsByCondition(search);
-            PageInfo pageInfo = PageInfo.getPageInfo(count, search.getPageSize());
-            Map<String, Object> data = new HashMap<>(2);
-            data.put("pageInfo", pageInfo);
-            data.put("majors", majors);
-            result = Result.retOk("success", data);
-        } catch (Exception e) {
-            result = Result.retFail(e.getMessage());
-        }
-        return result;
-    }
 
     @Override
     public Result addClass(Class clazz) {
@@ -199,18 +71,6 @@ public class SchoolServiceImpl implements SchoolService {
         search.normalize();
         Result result;
         try {
-            if (search.getDepartmentName() != null) {
-                search.setDepartmentIds(schoolMapper.findDepartmentIdsByName(search.getDepartmentName()));
-                if (search.getDepartmentIds() != null && search.getDepartmentIds().size() == 0) {
-                    search.setDepartmentIds(null);
-                }
-            }
-            if (search.getMajorName() != null) {
-                search.setMajorIds(schoolMapper.findMajorIdsByName(search.getMajorName()));
-                if (search.getMajorIds() != null && search.getMajorIds().size() == 0) {
-                    search.setMajorIds(null);
-                }
-            }
             Integer count = schoolMapper.findClassCountByCondition(search);
             List<Class> classes = schoolMapper.findClassesByCondition(search);
             PageInfo pageInfo = PageInfo.getPageInfo(count, search.getPageSize());
@@ -226,19 +86,12 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public Result getSchoolAll() {
-        Result result;
-        List<Department> departments = schoolMapper.findAllDepartments();
-        for (Department department : departments) {
-            List<Major> majors = schoolMapper.findMajorsByDepartmentId(department.getId());
-            for (Major major : majors) {
-                List<Class> classes = schoolMapper.findClassesByMajorId(major.getId());
-                major.setClasses(classes);
-            }
-            department.setMajors(majors);
-        }
-        Map<String, Object> data = new HashMap<>(1);
-        data.put("all", departments);
-        result = Result.retOk(data);
+        Result result = null;
+        //todo
+        List<Class> classes = schoolMapper.findAllClasses();
+//        Map<String, Object> data = new HashMap<>(1);
+//        data.put("all", departments);
+//        result = Result.retOk(data);
         return result;
     }
 }

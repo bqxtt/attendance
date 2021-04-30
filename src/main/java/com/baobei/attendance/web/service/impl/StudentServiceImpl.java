@@ -1,7 +1,8 @@
 package com.baobei.attendance.web.service.impl;
 
 import com.baobei.attendance.entity.Class;
-import com.baobei.attendance.entity.*;
+import com.baobei.attendance.entity.Dormitory;
+import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.model.PageInfo;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.model.search.StudentSearch;
@@ -35,6 +36,11 @@ public class StudentServiceImpl implements StudentService {
     public Result batchSaveStudent(List<Student> students) {
         Result result;
         try {
+            for (Student student : students) {
+                Class clazz = schoolMapper.findClassById(student.getClassId());
+                student.setDepartmentName(clazz.getDepartmentName());
+                student.setMajorName(clazz.getMajorName());
+            }
             studentMapper.addStudents(students);
             Map<String, Object> data = new HashMap<>(1);
             data.put("students", students);
@@ -52,6 +58,14 @@ public class StudentServiceImpl implements StudentService {
             result = Result.retFail("student id不一致");
         } else {
             try {
+                Long classId = student.getClassId();
+                if (classId != null) {
+                    Class clazz = schoolMapper.findClassById(classId);
+                    if (clazz != null) {
+                        student.setMajorName(clazz.getMajorName());
+                        student.setDepartmentName(clazz.getDepartmentName());
+                    }
+                }
                 studentMapper.updateStudent(student);
                 Map<String, Object> data = new HashMap<>(1);
                 data.put("student", student);
@@ -84,20 +98,16 @@ public class StudentServiceImpl implements StudentService {
             Integer count = studentMapper.findStudentCountByCondition(search);
             List<Student> students = studentMapper.findStudentsByCondition(search);
             for (Student student : students) {
-                Department department = schoolMapper.findDepartmentById(student.getDepartmentId());
-                Major major = schoolMapper.findMajorById(student.getMajorId());
                 Class clazz = schoolMapper.findClassById(student.getClassId());
                 Dormitory dormitory = dormitoryMapper.findDormitoryById(student.getDormitoryId());
                 student.setAClass(clazz);
-                student.setDepartment(department);
-                student.setMajor(major);
                 student.setDormitory(dormitory);
             }
             PageInfo pageInfo = PageInfo.getPageInfo(count, search.getPageSize());
             Map<String, Object> data = new HashMap<>(2);
             data.put("pageInfo", pageInfo);
             data.put("students", students);
-            result = Result.retOk("success", data);
+            result = Result.retOk(data);
         } catch (Exception e) {
             result = Result.retFail(e.getMessage());
         }

@@ -1,12 +1,9 @@
 package com.baobei.attendance.model.search;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.util.List;
 
 /**
  * @author tcg
@@ -18,10 +15,6 @@ import java.util.List;
 @ToString(callSuper = true)
 public class ClassSearch extends Search {
     private Long id;
-    @ApiModelProperty(hidden = true)
-    private List<Long> majorIds;
-    @ApiModelProperty(hidden = true)
-    private List<Long> departmentIds;
     private String className;
     private String departmentName;
     private String majorName;

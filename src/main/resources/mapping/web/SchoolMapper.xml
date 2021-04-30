@@ -3,153 +3,38 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baobei.attendance.web.mapper.SchoolMapper">
-    <insert id="addDepartment" parameterType="com.baobei.attendance.entity.Department" useGeneratedKeys="true"
-            keyProperty="id">
-        insert into departments(department_no, department_name)
-        values (#{departmentNo}, #{departmentName})
-    </insert>
-
-    <insert id="addMajor" parameterType="com.baobei.attendance.entity.Major" useGeneratedKeys="true" keyProperty="id">
-        insert into majors(major_no, major_name, department_id)
-        values (#{majorNo}, #{majorName}, #{departmentId})
-    </insert>
 
     <insert id="addClass" parameterType="com.baobei.attendance.entity.Class" useGeneratedKeys="true" keyProperty="id">
-        insert into classes(class_no, class_name, major_id)
-        values (#{classNo}, #{className}, #{majorId})
+        insert into classes(class_no, class_name, major_name, department_name)
+        values (#{classNo}, #{className}, #{majorName}, #{departmentName})
     </insert>
 
-    <update id="updateDepartment" parameterType="com.baobei.attendance.entity.Department">
-        update departments
-        <set>
-            <if test="departmentNo != null">
-                department_no = #{departmentNo}
-            </if>
-            <if test="departmentName != null">
-                department_name = #{departmentName}
-            </if>
-        </set>
-        where id = #{id}
-    </update>
-
-    <update id="updateMajor" parameterType="com.baobei.attendance.entity.Major">
-        update majors
-        <set>
-            <if test="majorNo != null">
-                major_no = #{majorNo}
-            </if>
-            <if test="majorName != null">
-                major_name = #{majorName}
-            </if>
-            <if test="departmentId != null">
-                department_id = #{departmentId}
-            </if>
-        </set>
-        where id = #{id}
-    </update>
 
     <update id="updateClass" parameterType="com.baobei.attendance.entity.Class">
         update classes
         <set>
             <if test="classNo != null">
-                class_no = #{classNo}
+                class_no = #{classNo},
             </if>
             <if test="className != null">
-                class_name = #{className}
+                class_name = #{className},
             </if>
-            <if test="majorId != null">
-                major_id = #{majorId}
+            <if test="majorName != null">
+                major_name = #{majorName},
+            </if>
+            <if test="departmentName != null">
+                department_name = #{departmentName},
             </if>
         </set>
         where id = #{id}
     </update>
 
-    <delete id="deleteDepartmentById">
-        delete
-        from departments
-        where id = #{id}
-    </delete>
-
-    <delete id="deleteMajorById">
-        delete
-        from majors
-        where id = #{id}
-    </delete>
 
     <delete id="deleteClassById">
         delete
         from classes
         where id = #{id}
     </delete>
-
-    <select id="findDepartmentsByCondition" parameterType="com.baobei.attendance.model.search.DepartmentSearch"
-            resultType="com.baobei.attendance.entity.Department">
-        select *
-        from departments
-        <where>
-            <if test="id != null">
-                id = #{id}
-            </if>
-            <if test="departmentName != null">
-                AND department_name = #{departmentName}
-            </if>
-        </where>
-        limit #{offset},#{limit}
-    </select>
-
-    <select id="findDepartmentCountByCondition" parameterType="com.baobei.attendance.model.search.DepartmentSearch"
-            resultType="java.lang.Integer">
-        select count(*)
-        from departments
-        <where>
-            <if test="id != null">
-                id = #{id}
-            </if>
-            <if test="departmentName != null">
-                AND department_name = #{departmentName}
-            </if>
-        </where>
-    </select>
-
-    <select id="findDepartmentById" parameterType="java.lang.Long" resultType="com.baobei.attendance.entity.Department">
-        select *
-        from departments
-        where id = #{id}
-    </select>
-
-    <select id="findMajorsByCondition" parameterType="com.baobei.attendance.model.search.MajorSearch"
-            resultType="com.baobei.attendance.entity.Major">
-        select *
-        from majors
-        <where>
-            <if test="id != null">
-                id = #{id}
-            </if>
-            <if test="majorName != null">
-                AND major_name = #{majorName}
-            </if>
-        </where>
-        limit #{offset},#{limit}
-    </select>
-
-    <select id="findMajorCountByCondition" parameterType="com.baobei.attendance.model.search.MajorSearch"
-            resultType="java.lang.Integer">
-        select count(*)
-        from departments
-        <where>
-            <if test="id != null">
-                id = #{id}
-            </if>
-            <if test="departmentName != null">
-                AND department_name = #{departmentName}
-            </if>
-        </where>
-    </select>
-    <select id="findMajorById" parameterType="java.lang.Long" resultType="com.baobei.attendance.entity.Major">
-        select *
-        from majors
-        where id = #{id}
-    </select>
 
     <select id="findClassesByCondition" parameterType="com.baobei.attendance.model.search.ClassSearch"
             resultType="com.baobei.attendance.entity.Class">
@@ -160,19 +45,13 @@
                 id = #{id}
             </if>
             <if test="className != null">
-                AND class_name = #{className}
+                AND class_name like concat('%',#{className},'%')
             </if>
-            <if test="departmentIds != null">
-                AND department_id in
-                <foreach collection="departmentIds" item="did" index="index" open="(" separator="," close=")">
-                    #{did}
-                </foreach>
+            <if test="departmentName != null">
+                AND department_name like concat('%',#{departmentName},'%')
             </if>
-            <if test="majorIds != null">
-                AND major_id in
-                <foreach collection="majorIds" item="mid" index="index" open="(" separator="," close=")">
-                    #{mid}
-                </foreach>
+            <if test="majorName != null">
+                AND major_name like concat('%',#{majorName},'%')
             </if>
         </where>
         limit #{offset},#{limit}
@@ -187,19 +66,13 @@
                 id = #{id}
             </if>
             <if test="className != null">
-                AND class_name = #{className}
+                AND class_name like concat('%',#{className},'%')
             </if>
-            <if test="departmentIds != null">
-                AND department_id in
-                <foreach collection="departmentIds" item="did" index="index" open="(" separator="," close=")">
-                    #{did}
-                </foreach>
+            <if test="departmentName != null">
+                AND department_name like concat('%',#{departmentName},'%')
             </if>
-            <if test="majorIds != null">
-                AND major_id in
-                <foreach collection="majorIds" item="mid" index="index" open="(" separator="," close=")">
-                    #{mid}
-                </foreach>
+            <if test="majorName != null">
+                AND major_name like concat('%',#{majorName},'%')
             </if>
         </where>
     </select>
@@ -210,40 +83,10 @@
         where id = #{id}
     </select>
 
-    <select id="findAllDepartments" resultType="com.baobei.attendance.entity.Department">
+    <select id="findAllClasses" resultType="com.baobei.attendance.entity.Class">
         select *
-        from departments;
+        from classes;
     </select>
 
-    <select id="findMajorsByDepartmentId" resultType="com.baobei.attendance.entity.Major">
-        select *
-        from majors
-        where department_id = #{departmentId}
-    </select>
 
-    <select id="findClassesByMajorId" resultType="com.baobei.attendance.entity.Class">
-        select *
-        from classes
-        where major_id = #{majorId}
-    </select>
-
-    <select id="findDepartmentIdsByName" resultType="java.lang.Long">
-        select id
-        from departments
-        <where>
-            <if test="departmentName != null">
-                department_name like concat('%', #{departmentName}, '%')
-            </if>
-        </where>
-    </select>
-
-    <select id="findMajorIdsByName" resultType="java.lang.Long">
-        select id
-        from majors
-        <where>
-            <if test="majorName != null">
-                major_name like concat('%', #{majorName}, '%')
-            </if>
-        </where>
-    </select>
 </mapper>
