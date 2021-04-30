@@ -9,8 +9,15 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class UserAddRes extends BaseRes {
-    @JSONField(name = "face_token")
-    private String faceToken;
-    @JSONField(name = "location")
-    private Location location;
+    @JSONField(name = "result")
+    private Result result;
+
+    @Data
+    public static class Result {
+        @JSONField(name = "face_token")
+        private String faceToken;
+        @JSONField(name = "location")
+        private Location location;
+    }
+
 }

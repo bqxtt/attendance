@@ -22,10 +22,13 @@
         where id = #{id}
     </select>
 
-    <select id="findStudentByStuNo" parameterType="java.lang.String" resultType="com.baobei.attendance.entity.Student">
+    <select id="findStudentByStuNos" resultType="com.baobei.attendance.entity.Student">
         select *
         from students
-        where stu_no = #{stuNo}
+        where stu_no in
+        <foreach collection="list" item="stuNo" index="index" open="(" separator="," close=")">
+            #{stuNo}
+        </foreach>
     </select>
 
     <insert id="addStudents" useGeneratedKeys="true" keyProperty="id">

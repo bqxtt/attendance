@@ -58,7 +58,7 @@ public class FaceRepoService {
         if (res.getErrorCode() != 0) {
             throw new Exception(res.getErrorMsg());
         }
-        return res.getFaceToken();
+        return res.getResult().getFaceToken();
     }
 
     public void deleteUserFace(String userId, String faceToken) throws Exception {

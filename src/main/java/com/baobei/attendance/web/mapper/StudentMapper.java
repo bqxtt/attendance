@@ -41,10 +41,10 @@ public interface StudentMapper {
     /**
      * 学号查
      *
-     * @param stuNo
+     * @param stuNos
      * @return
      */
-    Student findStudentByStuNo(String stuNo);
+    List<Student> findStudentByStuNos(List<String> stuNos);
 
     /**
      * 批量添加
