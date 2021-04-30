@@ -2,7 +2,7 @@ package com.baobei.attendance.web.service.impl;
 
 import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.model.Result;
-import com.baobei.attendance.service.PhotoUploadService;
+import com.baobei.attendance.service.FaceRepoService;
 import com.baobei.attendance.web.entity.Face;
 import com.baobei.attendance.web.mapper.FaceMapper;
 import com.baobei.attendance.web.mapper.StudentMapper;
@@ -23,7 +23,7 @@ import java.util.Objects;
 @Service
 public class FaceServiceImpl implements FaceService {
     @Autowired
-    PhotoUploadService uploadService;
+    FaceRepoService uploadService;
     @Autowired
     FaceMapper faceMapper;
     @Autowired
@@ -41,46 +41,47 @@ public class FaceServiceImpl implements FaceService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result uploadStudentFace(Long studentId, MultipartFile faceFile) {
+    public Result uploadStudentFace(Long studentId, MultipartFile faceFile) throws Exception {
         Student student = studentMapper.findStudentById(studentId);
         if (student == null) {
-            return Result.retFail("学生不存在");
+            return Result.retFail("student not exist");
         }
         Result result;
         String filepath = getFilepath(student.getStuNo(), Objects.requireNonNull(faceFile.getOriginalFilename()));
         if (filepath == null) {
             result = Result.retFail("file error");
         } else {
-            String url = uploadService.upload(faceFile, filepath);
-            if (url == null) {
-                result = Result.retFail("upload fail");
-            } else {
-                Face face = new Face();
-                face.setStudentId(studentId);
-                face.setUrl(url);
-                student.setFaceUrl(url);
-                faceMapper.addOrModifyStudentFace(face);
-                studentMapper.updateStudent(student);
-                Map<String, Object> data = new HashMap<>(1);
-                data.put("student", student);
-                result = Result.retOk("success", data);
-            }
+            String url = uploadService.uploadToOss(faceFile, filepath);
+            String faceToken = uploadService.adUserFace(student.getStuNo(), url);
+            Face face = new Face();
+            face.setStudentId(studentId);
+            face.setFaceToken(faceToken);
+            face.setStudentNo(student.getStuNo());
+            face.setUrl(url);
+            student.setFaceUrl(url);
+            faceMapper.addOrModifyStudentFace(face);
+            studentMapper.updateStudent(student);
+            Map<String, Object> data = new HashMap<>(1);
+            data.put("student", student);
+            result = Result.retOk(data);
         }
         return result;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result deleteStudentFace(Long studentId) {
+    public Result deleteStudentFace(Long studentId) throws Exception {
         Student student = studentMapper.findStudentById(studentId);
         if (student == null) {
-            return Result.retFail("学生不存在");
+            return Result.retFail("student not exist");
         }
-        student.setFaceUrl("");
+        Face face = faceMapper.findFaceByStudentId(studentId);
+        uploadService.deleteUserFace(student.getStuNo(), face.getFaceToken());
         faceMapper.deleteStudentFace(studentId);
+        student.setFaceUrl("");
         studentMapper.updateStudent(student);
         Map<String, Object> data = new HashMap<>(1);
         data.put("student", student);
-        return Result.retOk("success", data);
+        return Result.retOk(data);
     }
 }

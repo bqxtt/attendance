@@ -5,9 +5,11 @@
 <mapper namespace="com.baobei.attendance.web.mapper.FaceMapper">
     <insert id="addOrModifyStudentFace" parameterType="com.baobei.attendance.web.entity.Face" useGeneratedKeys="true"
             keyProperty="id">
-        insert into faces(student_id, url)
-        values (#{studentId}, #{url})
-        on duplicate key update url = #{url}
+        insert into faces(student_id, student_no, face_token, url)
+        values (#{studentId}, #{studentNo}, #{faceToken}, #{url})
+        on duplicate key
+            update url        = #{url},
+                   face_token = #{faceToken}
     </insert>
 
     <delete id="deleteStudentFace">
@@ -15,4 +17,10 @@
         from faces
         where student_id = #{studentId}
     </delete>
+
+    <select id="findFaceByStudentId" resultType="com.baobei.attendance.web.entity.Face">
+        select *
+        from faces
+        where student_id = #{studentId}
+    </select>
 </mapper>

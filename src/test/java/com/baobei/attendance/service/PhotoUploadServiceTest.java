@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class PhotoUploadServiceTest {
     @Autowired
-    PhotoUploadService photoUploadService;
+    FaceRepoService photoUploadService;
 
     @Test
     void uploadTest() {

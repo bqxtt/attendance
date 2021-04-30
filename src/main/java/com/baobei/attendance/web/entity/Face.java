@@ -10,5 +10,7 @@ import lombok.Data;
 public class Face {
     private Long id;
     private Long studentId;
+    private String studentNo;
+    private String faceToken;
     private String url;
 }

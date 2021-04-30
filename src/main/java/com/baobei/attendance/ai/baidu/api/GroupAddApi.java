@@ -3,10 +3,12 @@ package com.baobei.attendance.ai.baidu.api;
 import com.alibaba.fastjson.JSON;
 import com.baobei.attendance.ai.baidu.api.entity.GroupAddReq;
 import com.baobei.attendance.ai.baidu.api.entity.GroupAddRes;
+import org.springframework.stereotype.Component;
 
 /**
  * @author bqx
  */
+@Component
 public class GroupAddApi extends Api<GroupAddReq, GroupAddRes> {
 
     public GroupAddApi() {

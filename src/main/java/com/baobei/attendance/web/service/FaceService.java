@@ -15,7 +15,7 @@ public interface FaceService {
      * @param face
      * @return
      */
-    Result uploadStudentFace(Long studentId, MultipartFile face);
+    Result uploadStudentFace(Long studentId, MultipartFile face) throws Exception;
 
     /**
      * 删除人脸
@@ -23,5 +23,5 @@ public interface FaceService {
      * @param studentId
      * @return
      */
-    Result deleteStudentFace(Long studentId);
+    Result deleteStudentFace(Long studentId) throws Exception;
 }

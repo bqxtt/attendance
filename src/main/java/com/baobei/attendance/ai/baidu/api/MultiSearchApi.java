@@ -3,10 +3,12 @@ package com.baobei.attendance.ai.baidu.api;
 import com.alibaba.fastjson.JSON;
 import com.baobei.attendance.ai.baidu.api.entity.MultiSearchReq;
 import com.baobei.attendance.ai.baidu.api.entity.MultiSearchRes;
+import org.springframework.stereotype.Component;
 
 /**
  * @author bqx
  */
+@Component
 public class MultiSearchApi extends Api<MultiSearchReq, MultiSearchRes> {
 
     public MultiSearchApi() {

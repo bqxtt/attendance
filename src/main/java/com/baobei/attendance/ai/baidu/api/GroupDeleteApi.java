@@ -3,7 +3,9 @@ package com.baobei.attendance.ai.baidu.api;
 import com.alibaba.fastjson.JSON;
 import com.baobei.attendance.ai.baidu.api.entity.GroupDeleteReq;
 import com.baobei.attendance.ai.baidu.api.entity.GroupDeleteRes;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GroupDeleteApi extends Api<GroupDeleteReq, GroupDeleteRes> {
 
     public GroupDeleteApi() {

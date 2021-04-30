@@ -9,6 +9,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class UserAddReq extends BaseReq {
+    /**
+     * 图片信息(总数据大小应小于10M)，图片上传方式根据image_type来判断。
+     * 注：组内每个uid下的人脸图片数目上限为20张
+     */
     @JSONField(name = "image")
     private String image;
     /**
@@ -19,10 +23,19 @@ public class UserAddReq extends BaseReq {
      */
     @JSONField(name = "image_type")
     private String imageType;
+    /**
+     * 用户组id，标识一组用户（由数字、字母、下划线组成），长度限制48B。产品建议：根据您的业务需求，可以将需要注册的用户，按照业务划分，分配到不同的group下，例如按照会员手机尾号作为groupid，用于刷脸支付、会员计费消费等，这样可以尽可能控制每个group下的用户数与人脸数，提升检索的准确率
+     */
     @JSONField(name = "group_id")
     private String groupId;
+    /**
+     * 用户id（由数字、字母、下划线组成），长度限制128B
+     */
     @JSONField(name = "user_id")
     private String userId;
+    /**
+     * 用户资料，长度限制256B 默认空
+     */
     @JSONField(name = "user_info")
     private String userInfo;
     /**

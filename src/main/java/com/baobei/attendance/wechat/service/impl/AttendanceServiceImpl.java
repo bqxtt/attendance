@@ -1,8 +1,10 @@
 package com.baobei.attendance.wechat.service.impl;
 
 import com.baobei.attendance.model.Result;
+import com.baobei.attendance.service.FaceRepoService;
 import com.baobei.attendance.wechat.entity.Records;
 import com.baobei.attendance.wechat.service.AttendanceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
+    @Autowired
+    FaceRepoService faceRepoService;
+
     @Override
     public Result uploadPhoto(MultipartFile photo) {
         //todo

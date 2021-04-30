@@ -14,4 +14,6 @@ public interface FaceMapper {
     Integer addOrModifyStudentFace(Face face);
 
     Integer deleteStudentFace(Long studentId);
+
+    Face findFaceByStudentId(Long studentId);
 }
