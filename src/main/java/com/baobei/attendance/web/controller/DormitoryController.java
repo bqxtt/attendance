@@ -47,7 +47,7 @@ public class DormitoryController {
     }
 
     @ApiOperation("宿舍列表")
-    @PostMapping("/dormitories")
+    @PostMapping("/dormitories/list")
     public ResponseEntity<Result> getDormitories(@RequestBody DormitorySearch search) {
         Result result = dormitoryService.getDormitories(search);
         return new ResponseEntity<>(result, HttpStatus.OK);

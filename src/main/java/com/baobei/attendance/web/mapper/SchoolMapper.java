@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 public interface SchoolMapper {
 
-    Integer addClass(Class clazz);
+    Integer addClasses(List<Class> classes);
 
 
     Integer updateClass(Class clazz);

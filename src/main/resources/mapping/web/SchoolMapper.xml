@@ -4,9 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baobei.attendance.web.mapper.SchoolMapper">
 
-    <insert id="addClass" parameterType="com.baobei.attendance.entity.Class" useGeneratedKeys="true" keyProperty="id">
+    <insert id="addClasses" parameterType="com.baobei.attendance.entity.Class" useGeneratedKeys="true" keyProperty="id">
         insert into classes(class_no, class_name, major_name, department_name)
-        values (#{classNo}, #{className}, #{majorName}, #{departmentName})
+        values
+        <foreach collection="list" item="class" index="index" separator=",">
+            (#{class.classNo}, #{class.className}, #{class.majorName}, #{class.departmentName})
+        </foreach>
     </insert>
 
 

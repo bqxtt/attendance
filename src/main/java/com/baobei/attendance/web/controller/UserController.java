@@ -69,7 +69,7 @@ public class UserController {
     }
 
     @ApiOperation("管理员列表")
-    @PostMapping("/admins")
+    @PostMapping("/admins/list")
     public ResponseEntity<Result> getAdmins(@RequestBody WebUserSearch search) {
         Result result = userService.getAdmins(search);
         return new ResponseEntity<>(result, HttpStatus.OK);

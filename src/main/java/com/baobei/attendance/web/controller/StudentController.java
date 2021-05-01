@@ -26,7 +26,7 @@ public class StudentController {
     StudentService studentService;
 
     @ApiOperation("批量添加学生")
-    @PostMapping("/student")
+    @PostMapping("/students")
     public ResponseEntity<Result> addStudents(@RequestBody List<Student> students) {
         Result result = studentService.batchSaveStudent(students);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -47,7 +47,7 @@ public class StudentController {
     }
 
     @ApiOperation("获取学生列表")
-    @PostMapping("/students")
+    @PostMapping("/students/list")
     public ResponseEntity<Result> getStudents(@RequestBody StudentSearch search) {
         Result result = studentService.getStudents(search);
         return new ResponseEntity<>(result, HttpStatus.OK);

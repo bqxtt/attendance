@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author tcg
  * @date 2021/4/14
@@ -79,10 +81,10 @@ public class SchoolController {
 //        return new ResponseEntity<>(result, HttpStatus.OK);
 //    }
 
-    @ApiOperation("增加班级")
-    @PostMapping("/class")
-    public ResponseEntity<Result> addClass(@RequestBody Class clazz) {
-        Result result = schoolService.addClass(clazz);
+    @ApiOperation("批量增加班级")
+    @PostMapping("/classes")
+    public ResponseEntity<Result> addClass(@RequestBody List<Class> classes) {
+        Result result = schoolService.addClasses(classes);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -101,7 +103,7 @@ public class SchoolController {
     }
 
     @ApiOperation("班级列表")
-    @PostMapping("/classes")
+    @PostMapping("/classes/list")
     public ResponseEntity<Result> getClasses(@RequestBody ClassSearch search) {
         Result result = schoolService.getClasses(search);
         return new ResponseEntity<>(result, HttpStatus.OK);

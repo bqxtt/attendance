@@ -4,6 +4,8 @@ import com.baobei.attendance.entity.Class;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.model.search.ClassSearch;
 
+import java.util.List;
+
 /**
  * @author tcg
  * @date 2021/4/14
@@ -12,10 +14,10 @@ public interface SchoolService {
     /**
      * 增加班级
      *
-     * @param clazz
+     * @param classes
      * @return
      */
-    Result addClass(Class clazz);
+    Result addClasses(List<Class> classes);
 
     /**
      * 修改班级

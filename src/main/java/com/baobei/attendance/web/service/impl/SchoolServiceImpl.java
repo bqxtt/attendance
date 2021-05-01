@@ -23,13 +23,13 @@ public class SchoolServiceImpl implements SchoolService {
     SchoolMapper schoolMapper;
 
     @Override
-    public Result addClass(Class clazz) {
+    public Result addClasses(List<Class> classes) {
         Result result;
         try {
-            schoolMapper.addClass(clazz);
+            schoolMapper.addClasses(classes);
             Map<String, Object> data = new HashMap<>(1);
-            data.put("class", clazz);
-            result = Result.retOk("success", data);
+            data.put("classes", classes);
+            result = Result.retOk(data);
         } catch (Exception e) {
             result = Result.retFail(e.getMessage());
         }
