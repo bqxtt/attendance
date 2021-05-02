@@ -16,8 +16,13 @@ public class Dormitory {
     private Long id;
     private String community;
     private String building;
+    private String roomNo;
     private String roomName;
     private Integer capacity;
     @ApiModelProperty(hidden = true)
     private List<Student> students;
+
+    public String getRoomName() {
+        return community + "#" + building + roomNo;
+    }
 }

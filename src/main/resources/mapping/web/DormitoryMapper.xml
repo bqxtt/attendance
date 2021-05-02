@@ -5,10 +5,11 @@
 <mapper namespace="com.baobei.attendance.web.mapper.DormitoryMapper">
     <insert id="addDormitories" parameterType="com.baobei.attendance.entity.Dormitory" useGeneratedKeys="true"
             keyProperty="id">
-        insert into dormitories(community,building, room_name, capacity)
+        insert into dormitories(community,building, room_no,room_name, capacity)
         values
         <foreach collection="list" item="dormitory" index="index" separator=",">
-            (#{dormitory.community},#{dormitory.building}, #{dormitory.roomName}, #{dormitory.capacity})
+            (#{dormitory.community},#{dormitory.building},#{dormitory.roomNo},#{dormitory.roomName},
+            #{dormitory.capacity})
         </foreach>
 
     </insert>
@@ -16,8 +17,14 @@
     <update id="updateDormitory" parameterType="com.baobei.attendance.entity.Dormitory">
         update dormitories
         <set>
+            <if test="community != null">
+                community = #{community},
+            </if>
             <if test="building != null">
                 building = #{building},
+            </if>
+            <if test="roomNo != null">
+                room_no = #{roomNo},
             </if>
             <if test="roomName != null">
                 room_name = #{roomName},
