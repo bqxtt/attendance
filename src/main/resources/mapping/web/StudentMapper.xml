@@ -33,6 +33,7 @@
     <select id="findStudentCountByCondition" parameterType="com.baobei.attendance.model.search.StudentSearch"
             resultType="java.lang.Integer">
         select count(*)
+        from students
         <where>
             <if test="id != null">
                 id = #{id}
@@ -53,7 +54,6 @@
                 AND class_id = #{classId}
             </if>
         </where>
-        from students
     </select>
 
     <select id="findStudentById" parameterType="java.lang.Long" resultType="com.baobei.attendance.entity.Student">
