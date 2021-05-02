@@ -28,13 +28,13 @@ public class DormitoryServiceImpl implements DormitoryService {
     StudentMapper studentMapper;
 
     @Override
-    public Result addDormitory(Dormitory dormitory) {
+    public Result addDormitories(List<Dormitory> dormitories) {
         Result result;
         try {
-            dormitoryMapper.addDormitory(dormitory);
+            dormitoryMapper.addDormitories(dormitories);
             Map<String, Object> data = new HashMap<>(1);
-            data.put("dormitory", dormitory);
-            result = Result.retOk("success", data);
+            data.put("dormitories", dormitories);
+            result = Result.retOk(data);
         } catch (Exception e) {
             result = Result.retFail(e.getMessage());
         }

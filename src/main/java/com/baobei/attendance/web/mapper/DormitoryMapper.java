@@ -18,10 +18,10 @@ public interface DormitoryMapper {
     /**
      * 增加宿舍
      *
-     * @param dormitory
+     * @param dormitories
      * @return
      */
-    Integer addDormitory(Dormitory dormitory);
+    Integer addDormitories(List<Dormitory> dormitories);
 
     /**
      * 修改宿舍

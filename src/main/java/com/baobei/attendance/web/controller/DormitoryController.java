@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author tcg
  * @date 2021/4/17
@@ -26,9 +28,9 @@ public class DormitoryController {
     DormitoryService dormitoryService;
 
     @ApiOperation("添加宿舍")
-    @PostMapping("/dormitory")
-    public ResponseEntity<Result> addDormitory(@RequestBody Dormitory dormitory) {
-        Result result = dormitoryService.addDormitory(dormitory);
+    @PostMapping("/dormitories")
+    public ResponseEntity<Result> addDormitories(@RequestBody List<Dormitory> dormitories) {
+        Result result = dormitoryService.addDormitories(dormitories);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

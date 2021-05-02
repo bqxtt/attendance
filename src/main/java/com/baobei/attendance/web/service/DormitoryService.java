@@ -4,6 +4,8 @@ import com.baobei.attendance.entity.Dormitory;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.model.search.DormitorySearch;
 
+import java.util.List;
+
 /**
  * @author tcg
  * @date 2021/4/17
@@ -15,7 +17,7 @@ public interface DormitoryService {
      * @param dormitory
      * @return
      */
-    Result addDormitory(Dormitory dormitory);
+    Result addDormitories(List<Dormitory> dormitories);
 
     /**
      * 修改宿舍

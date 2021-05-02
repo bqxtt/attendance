@@ -3,10 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baobei.attendance.web.mapper.DormitoryMapper">
-    <insert id="addDormitory" parameterType="com.baobei.attendance.entity.Dormitory" useGeneratedKeys="true"
+    <insert id="addDormitories" parameterType="com.baobei.attendance.entity.Dormitory" useGeneratedKeys="true"
             keyProperty="id">
-        insert into dormitories(building, room_name, capacity)
-        values (#{building}, #{roomName}, #{capacity})
+        insert into dormitories(community,building, room_name, capacity)
+        values
+        <foreach collection="list" item="dormitory" index="index" separator=",">
+            (#{dormitory.community},#{dormitory.building}, #{dormitory.roomName}, #{dormitory.capacity})
+        </foreach>
+
     </insert>
 
     <update id="updateDormitory" parameterType="com.baobei.attendance.entity.Dormitory">
