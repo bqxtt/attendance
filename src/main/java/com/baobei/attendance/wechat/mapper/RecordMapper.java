@@ -1,6 +1,7 @@
 package com.baobei.attendance.wechat.mapper;
 
 import com.baobei.attendance.entity.Record;
+import com.baobei.attendance.model.RecordCondition;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -20,4 +21,13 @@ public interface RecordMapper {
      * @return
      */
     Integer addStudentRecords(List<Record> records);
+
+    /**
+     * 查找打卡记录
+     *
+     * @param condition
+     * @return
+     */
+    List<Record> findRecordsByCondition(RecordCondition condition);
+
 }

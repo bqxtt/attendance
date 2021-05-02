@@ -1,7 +1,6 @@
 package com.baobei.attendance.web.mapper;
 
 import com.baobei.attendance.entity.Dormitory;
-import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.model.search.DormitorySearch;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
@@ -47,14 +46,6 @@ public interface DormitoryMapper {
      * @return
      */
     List<Dormitory> findDormitoriesByCondition(DormitorySearch search);
-
-    /**
-     * 查找宿舍学生
-     *
-     * @param dormitoryId
-     * @return
-     */
-    List<Student> findDormitoryStudents(Long dormitoryId);
 
     /**
      * 查找数量 （分页）

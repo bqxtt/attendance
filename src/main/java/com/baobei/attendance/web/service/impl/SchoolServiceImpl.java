@@ -4,11 +4,13 @@ import com.baobei.attendance.entity.Class;
 import com.baobei.attendance.model.PageInfo;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.model.search.ClassSearch;
+import com.baobei.attendance.web.entity.Cascader;
 import com.baobei.attendance.web.mapper.SchoolMapper;
 import com.baobei.attendance.web.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,12 +88,46 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public Result getSchoolAll() {
-        Result result = null;
-        //todo
+        Result result;
         List<Class> classes = schoolMapper.findAllClasses();
-//        Map<String, Object> data = new HashMap<>(1);
-//        data.put("all", departments);
-//        result = Result.retOk(data);
+        Map<String, Map<String, List<Class>>> departmentMap = new HashMap<>();
+        for (Class clazz : classes) {
+            if (!departmentMap.containsKey(clazz.getDepartmentName())) {
+                departmentMap.put(clazz.getDepartmentName(), new HashMap<>());
+            }
+            Map<String, List<Class>> majorMap = departmentMap.get(clazz.getDepartmentName());
+            if (!majorMap.containsKey(clazz.getMajorName())) {
+                majorMap.put(clazz.getMajorName(), new ArrayList<>());
+            }
+            List<Class> classList = majorMap.get(clazz.getMajorName());
+            classList.add(clazz);
+        }
+        List<Cascader> cascaders = new ArrayList<>();
+        for (Map.Entry<String, Map<String, List<Class>>> department : departmentMap.entrySet()) {
+            Cascader departmentCascader = new Cascader();
+            departmentCascader.setLabel(department.getKey());
+            departmentCascader.setValue(department.getKey());
+            List<Cascader> majorCascaderList = new ArrayList<>();
+            for (Map.Entry<String, List<Class>> major : department.getValue().entrySet()) {
+                Cascader majorCascader = new Cascader();
+                majorCascader.setValue(major.getKey());
+                majorCascader.setLabel(major.getKey());
+                List<Cascader> classCascaderList = new ArrayList<>();
+                for (Class clazz : major.getValue()) {
+                    Cascader classCascader = new Cascader();
+                    classCascader.setValue(clazz.getId().toString());
+                    classCascader.setLabel(clazz.getClassNo());
+                    classCascaderList.add(classCascader);
+                }
+                majorCascader.setChildren(classCascaderList);
+                majorCascaderList.add(majorCascader);
+            }
+            departmentCascader.setChildren(majorCascaderList);
+            cascaders.add(departmentCascader);
+        }
+        Map<String, Object> data = new HashMap<>(1);
+        data.put("options", cascaders);
+        result = Result.retOk(data);
         return result;
     }
 }

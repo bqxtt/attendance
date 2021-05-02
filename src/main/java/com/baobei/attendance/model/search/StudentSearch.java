@@ -17,6 +17,7 @@ public class StudentSearch extends Search {
     private String username;
     private String departmentName;
     private String majorName;
+    private Long classId;
 
     @Override
     public void normalize() {
@@ -35,6 +36,9 @@ public class StudentSearch extends Search {
         }
         if ("".equals(majorName)) {
             majorName = null;
+        }
+        if (classId == null || classId == 0) {
+            classId = null;
         }
     }
 

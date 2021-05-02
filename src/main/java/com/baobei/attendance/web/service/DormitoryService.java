@@ -57,4 +57,13 @@ public interface DormitoryService {
      * @return
      */
     Result findDormitoryByRoomName(String roomName);
+
+    /**
+     * 添加宿舍学生
+     *
+     * @param dormitoryId
+     * @param studentId
+     * @return
+     */
+    Result addDormitoryStudent(Long dormitoryId, Long studentId);
 }

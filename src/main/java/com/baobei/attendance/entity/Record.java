@@ -12,6 +12,9 @@ import java.util.Date;
 public class Record {
     private Long id;
     private Long studentId;
+    private String studentNo;
+    private String username;
+    private Long classId;
     private Date recordTime;
     private String photoUrl;
 }

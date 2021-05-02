@@ -6,6 +6,7 @@ import com.baobei.attendance.model.PageInfo;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.model.search.DormitorySearch;
 import com.baobei.attendance.web.mapper.DormitoryMapper;
+import com.baobei.attendance.web.mapper.StudentMapper;
 import com.baobei.attendance.web.service.DormitoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ import java.util.Map;
 public class DormitoryServiceImpl implements DormitoryService {
     @Autowired
     DormitoryMapper dormitoryMapper;
+
+    @Autowired
+    StudentMapper studentMapper;
 
     @Override
     public Result addDormitory(Dormitory dormitory) {
@@ -75,14 +79,14 @@ public class DormitoryServiceImpl implements DormitoryService {
             Integer count = dormitoryMapper.findDormitoryCountByCondition(search);
             List<Dormitory> dormitories = dormitoryMapper.findDormitoriesByCondition(search);
             for (Dormitory dormitory : dormitories) {
-                List<Student> students = dormitoryMapper.findDormitoryStudents(dormitory.getId());
+                List<Student> students = studentMapper.findStudentsByDormitoryId(dormitory.getId());
                 dormitory.setStudents(students);
             }
             PageInfo pageInfo = PageInfo.getPageInfo(count, search.getPageSize());
             Map<String, Object> data = new HashMap<>(2);
             data.put("pageInfo", pageInfo);
             data.put("dormitories", dormitories);
-            result = Result.retOk("success", data);
+            result = Result.retOk(data);
         } catch (Exception e) {
             result = Result.retFail(e.getMessage());
         }
@@ -124,4 +128,34 @@ public class DormitoryServiceImpl implements DormitoryService {
         }
         return result;
     }
+
+    @Override
+    public Result addDormitoryStudent(Long dormitoryId, Long studentId) {
+        Result result = null;
+        try {
+            List<Student> students = studentMapper.findStudentsByDormitoryId(dormitoryId);
+            Dormitory dormitory = dormitoryMapper.findDormitoryById(dormitoryId);
+            for (Student student : students) {
+                if (student.getId().equals(studentId)) {
+                    result = Result.retFail("student already exist");
+                    break;
+                }
+            }
+            if (result == null) {
+                if (students.size() >= dormitory.getCapacity()) {
+                    result = Result.retFail("dormitory is full");
+                } else {
+                    Student student = studentMapper.findStudentById(studentId);
+                    student.setDormitoryId(dormitoryId);
+                    studentMapper.updateStudent(student);
+                    result = Result.retOk("success");
+                }
+            }
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
+        return result;
+    }
+
+
 }

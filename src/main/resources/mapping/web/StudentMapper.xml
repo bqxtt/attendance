@@ -23,6 +23,9 @@
             <if test="majorName != null">
                 AND major_name like concat('%',#{majorName},'%')
             </if>
+            <if test="classId != null">
+                AND class_id = #{classId}
+            </if>
         </where>
         limit #{offset},#{limit}
     </select>
@@ -45,6 +48,9 @@
             </if>
             <if test="majorName != null">
                 AND major_name like concat('%',#{majorName},'%')
+            </if>
+            <if test="classId != null">
+                AND class_id = #{classId}
             </if>
         </where>
         from students
@@ -127,4 +133,17 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="findStudentsByDormitoryId" parameterType="java.lang.Long"
+            resultType="com.baobei.attendance.entity.Student">
+        select *
+        from students
+        where dormitory_id = #{dormitoryId}
+    </select>
+
+    <select id="findStudentsByClassId" parameterType="java.lang.Long" resultType="com.baobei.attendance.entity.Student">
+        select *
+        from students
+        where class_id = #{classId}
+    </select>
 </mapper>

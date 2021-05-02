@@ -1,11 +1,15 @@
 package com.baobei.attendance.wechat.service.impl;
 
+import com.baobei.attendance.entity.Record;
 import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.service.FaceRepoService;
+import com.baobei.attendance.utils.JWTUtil;
 import com.baobei.attendance.web.mapper.StudentMapper;
 import com.baobei.attendance.wechat.entity.Records;
+import com.baobei.attendance.wechat.mapper.RecordMapper;
 import com.baobei.attendance.wechat.service.AttendanceService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +27,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     FaceRepoService faceRepoService;
     @Autowired
     StudentMapper studentMapper;
+    @Autowired
+    RecordMapper recordMapper;
 
     private String getFilepath(String filename) {
         int pos = filename.lastIndexOf(".");
@@ -35,6 +41,26 @@ public class AttendanceServiceImpl implements AttendanceService {
         return "records/" + date + "/" + time + suffix;
     }
 
+    private Map<String, Object> getClaims(List<Student> students) {
+        Map<String, Object> claims = new HashMap<>(students.size());
+        for (Student student : students) {
+            claims.put(student.getStuNo(), student.getUsername());
+        }
+        return claims;
+    }
+
+    private void verifyToken(Records records) throws Exception {
+        if (records.getToken() == null) {
+            throw new Exception("token is null");
+        }
+        Claims claims = JWTUtil.parseToken(records.getToken());
+        for (Record record : records.getRecords()) {
+            if (!record.getUsername().equals(claims.get(record.getStudentNo()))) {
+                throw new Exception("verify token failed, token message modified");
+            }
+        }
+    }
+
     @Override
     public Result uploadPhoto(MultipartFile photo) {
         Result result;
@@ -43,8 +69,10 @@ public class AttendanceServiceImpl implements AttendanceService {
             String url = faceRepoService.uploadToOss(photo, filePath);
             List<String> studentNos = faceRepoService.faceMultiSearch(url);
             List<Student> students = studentMapper.findStudentByStuNos(studentNos);
-            Map<String, Object> data = new HashMap<>(1);
+            Map<String, Object> data = new HashMap<>(3);
             data.put("students", students);
+            data.put("token", JWTUtil.generateToken(getClaims(students)));
+            data.put("url", url);
             result = Result.retOk(data);
         } catch (Exception e) {
             result = Result.retFail(e.getMessage());
@@ -54,7 +82,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public Result addStudentRecords(Records records) {
-        //todo
-        return Result.retOk("");
+        Result result;
+        try {
+            verifyToken(records);
+            recordMapper.addStudentRecords(records.getRecords());
+            result = Result.retOk("success");
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
+        return result;
     }
 }

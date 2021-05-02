@@ -53,6 +53,13 @@ public class DormitoryController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @ApiOperation("添加学生")
+    @PutMapping("/dormitory/student/{dormitoryId}")
+    public ResponseEntity<Result> addDormitoryStudent(@PathVariable Long dormitoryId, @RequestParam Long studentId) {
+        Result result = dormitoryService.addDormitoryStudent(dormitoryId, studentId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @ApiOperation("查找宿舍是否存在")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dormitoryId", value = "宿舍ID", required = false, paramType = "query"),

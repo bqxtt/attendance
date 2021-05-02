@@ -5,8 +5,8 @@
 <mapper namespace="com.baobei.attendance.web.mapper.DormitoryMapper">
     <insert id="addDormitory" parameterType="com.baobei.attendance.entity.Dormitory" useGeneratedKeys="true"
             keyProperty="id">
-        insert into dormitories(building,room_name,capacity)
-        values(#{building},#{roomName},#{capacity})
+        insert into dormitories(building, room_name, capacity)
+        values (#{building}, #{roomName}, #{capacity})
     </insert>
 
     <update id="updateDormitory" parameterType="com.baobei.attendance.entity.Dormitory">
@@ -26,7 +26,8 @@
     </update>
 
     <delete id="deleteDormitory">
-        delete from dormitories
+        delete
+        from dormitories
         where id = #{id}
     </delete>
 
@@ -49,12 +50,6 @@
             </if>
         </where>
         limit #{offset},#{limit}
-    </select>
-
-    <select id="findDormitoryStudents" parameterType="java.lang.Long" resultType="com.baobei.attendance.entity.Student">
-        select *
-        from students
-        where dormitory_id = #{dormitoryId}
     </select>
 
     <select id="findDormitoryCountByCondition" parameterType="com.baobei.attendance.model.search.DormitorySearch"

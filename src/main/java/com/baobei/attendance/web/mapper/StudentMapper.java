@@ -23,6 +23,22 @@ public interface StudentMapper {
     List<Student> findStudentsByCondition(StudentSearch search);
 
     /**
+     * 获取宿舍学生
+     *
+     * @param dormitoryId
+     * @return
+     */
+    List<Student> findStudentsByDormitoryId(Long dormitoryId);
+
+    /**
+     * 获取班级学生
+     *
+     * @param classId
+     * @return
+     */
+    List<Student> findStudentsByClassId(Long classId);
+
+    /**
      * 数量 分页
      *
      * @param search
