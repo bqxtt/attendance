@@ -157,5 +157,23 @@ public class DormitoryServiceImpl implements DormitoryService {
         return result;
     }
 
+    @Override
+    public Result deleteDormitoryStudent(Long dormitoryId, Long studentId) {
+        Result result;
+        try {
+            Student student = studentMapper.findStudentById(studentId);
+            if (!dormitoryId.equals(student.getDormitoryId())) {
+                result = Result.retFail("学生不在该宿舍");
+            } else {
+                student.setDormitoryId(0L);
+                studentMapper.updateStudent(student);
+                result = Result.retOk("success");
+            }
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
+        return result;
+    }
+
 
 }

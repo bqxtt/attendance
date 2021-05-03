@@ -55,12 +55,20 @@ public class DormitoryController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @ApiOperation("添加学生")
-    @PutMapping("/dormitory/student/{dormitoryId}")
-    public ResponseEntity<Result> addDormitoryStudent(@PathVariable Long dormitoryId, @RequestParam Long studentId) {
+    @ApiOperation("添加宿舍学生")
+    @PutMapping("/dormitory/student")
+    public ResponseEntity<Result> addDormitoryStudent(@RequestParam Long dormitoryId, @RequestParam Long studentId) {
         Result result = dormitoryService.addDormitoryStudent(dormitoryId, studentId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @ApiOperation("删除宿舍学生")
+    @DeleteMapping("/dormitory/student")
+    public ResponseEntity<Result> deleteDormitoryStudent(@RequestParam Long studentId, @RequestParam Long dormitoryId) {
+        Result result = dormitoryService.deleteDormitoryStudent(dormitoryId, studentId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 
     @ApiOperation("查找宿舍是否存在")
     @ApiImplicitParams({

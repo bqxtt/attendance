@@ -51,13 +51,16 @@
                 id = #{id}
             </if>
             <if test="roomName != null">
-                AND room_name = #{roomName}
+                AND room_name like concat('%',#{roomName},'%')
             </if>
             <if test="community != null">
                 AND community = #{community}
             </if>
             <if test="building != null">
                 AND building = #{building}
+            </if>
+            <if test="roomNo != null">
+                AND room_no = #{roomNo}
             </if>
         </where>
         limit #{offset},#{limit}
@@ -72,13 +75,16 @@
                 id = #{id}
             </if>
             <if test="roomName != null">
-                AND room_name = #{roomName}
+                AND room_name like concat('%',#{roomName},'%')
             </if>
             <if test="community != null">
                 AND community = #{community}
             </if>
             <if test="building != null">
                 AND building = #{building}
+            </if>
+            <if test="roomNo != null">
+                AND room_no = #{roomNo}
             </if>
         </where>
     </select>

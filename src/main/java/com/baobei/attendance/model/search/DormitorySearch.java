@@ -16,6 +16,7 @@ public class DormitorySearch extends Search {
     private String community;
     private String building;
     private String roomName;
+    private String roomNo;
 
     @Override
     public void normalize() {
@@ -31,6 +32,9 @@ public class DormitorySearch extends Search {
         }
         if ("".equals(building)) {
             building = null;
+        }
+        if ("".equals(roomNo)) {
+            roomNo = null;
         }
     }
 }

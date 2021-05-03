@@ -14,7 +14,7 @@ public interface DormitoryService {
     /**
      * 添加宿舍
      *
-     * @param dormitory
+     * @param dormitories
      * @return
      */
     Result addDormitories(List<Dormitory> dormitories);
@@ -68,4 +68,13 @@ public interface DormitoryService {
      * @return
      */
     Result addDormitoryStudent(Long dormitoryId, Long studentId);
+
+    /**
+     * 删除宿舍学生
+     *
+     * @param dormitoryId
+     * @param studentId
+     * @return
+     */
+    Result deleteDormitoryStudent(Long dormitoryId, Long studentId);
 }
