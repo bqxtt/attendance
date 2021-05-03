@@ -1,6 +1,5 @@
 package com.baobei.attendance.web.mapper;
 
-import com.baobei.attendance.entity.Class;
 import com.baobei.attendance.web.entity.WebUser;
 import com.baobei.attendance.web.entity.WebUserSearch;
 import org.apache.ibatis.annotations.Mapper;
@@ -35,10 +34,10 @@ public interface WebUserMapper {
     /**
      * 获取管理班级
      *
-     * @param classIds
+     * @param webUserId
      * @return
      */
-    List<Class> findWebUserClasses(List<Long> classIds);
+    List<Long> findWebUserClassIds(Long webUserId);
 
     /**
      * 条件获取管理员列表

@@ -4,19 +4,21 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baobei.attendance.web.mapper.WebUserMapper">
     <select id="findWebUserByAccount" resultType="com.baobei.attendance.web.entity.WebUser">
-        select * from web_users where account = #{account}
+        select *
+        from web_users
+        where account = #{account}
     </select>
 
     <select id="findWebUserByWebUserId" resultType="com.baobei.attendance.web.entity.WebUser">
-        select * from web_users where id = #{webUserId}
+        select *
+        from web_users
+        where id = #{webUserId}
     </select>
 
-    <select id="findWebUserClasses" parameterType="java.util.List" resultType="com.baobei.attendance.entity.Class">
-        select * from classes
-        where id in
-        <foreach collection="list" index="index" item="classId" open="(" separator="," close=")">
-            #{classId}
-        </foreach>
+    <select id="findWebUserClassIds" resultType="java.lang.Long">
+        select class_id
+        from managements
+        where web_user_id = #{webUserId}
     </select>
 
     <select id="findWebUsersByCondition" parameterType="com.baobei.attendance.web.entity.WebUserSearch"
@@ -28,6 +30,12 @@
             </if>
             <if test="account != null">
                 AND account = #{account}
+            </if>
+            <if test="department != null">
+                AND department like concat('%',#{department},'%')
+            </if>
+            <if test="adminName != null">
+                AND admin_name like concat('%',#{adminName},'%')
             </if>
         </where>
         limit #{offset},#{limit}
@@ -43,13 +51,19 @@
             <if test="account != null">
                 AND account = #{account}
             </if>
+            <if test="department != null">
+                AND department like concat('%',#{department},'%')
+            </if>
+            <if test="adminName != null">
+                AND admin_name like concat('%',#{adminName},'%')
+            </if>
         </where>
     </select>
 
     <insert id="addWebUser" parameterType="com.baobei.attendance.web.entity.WebUser" useGeneratedKeys="true"
             keyProperty="id">
-        insert into web_users(teacher_no,account,password,phone)
-        values(#{teacherNo},#{account},#{password},#{phone})
+        insert into web_users(teacher_no, account, admin_name, password, department, phone)
+        values (#{teacherNo}, #{account}, #{adminName}, #{password}, #{department}, #{phone})
     </insert>
 
     <insert id="addWebUserManagements">
@@ -66,23 +80,34 @@
             <if test="teacherNo != null">
                 tescher_no = #{teacherNo},
             </if>
+            <if test="account != null">
+                account = #{account},
+            </if>
             <if test="password != null">
                 password = #{password},
             </if>
             <if test="phone != null">
                 phone = #{phone},
             </if>
+            <if test="department != null">
+                department = #{department},
+            </if>
+            <if test="adminName != null">
+                admin_name = #{adminName},
+            </if>
         </set>
         where id = #{id}
     </update>
 
     <delete id="deleteWebUserManagements">
-        delete from managements
+        delete
+        from managements
         where web_user_id = #{webUserId}
     </delete>
 
     <delete id="deleteWebUser">
-        delete from web_users
+        delete
+        from web_users
         where id = #{webUserId}
     </delete>
 </mapper>

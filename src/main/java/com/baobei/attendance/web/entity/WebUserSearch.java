@@ -15,6 +15,8 @@ import lombok.ToString;
 public class WebUserSearch extends Search {
     private String teacherNo;
     private String account;
+    private String department;
+    private String adminName;
 
     @Override
     public void normalize() {
@@ -24,6 +26,12 @@ public class WebUserSearch extends Search {
         }
         if ("".equals(this.account)) {
             this.account = null;
+        }
+        if ("".equals(this.department)) {
+            this.department = null;
+        }
+        if ("".equals(this.adminName)) {
+            this.adminName = null;
         }
     }
 }

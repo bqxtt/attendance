@@ -15,6 +15,8 @@ public class WebUser {
     private String teacherNo;
     private String account;
     private String password;
+    private String adminName;
+    private String department;
     private String phone;
     private List<Long> classIds;
     private List<Class> classes;

@@ -5,12 +5,14 @@ import com.baobei.attendance.model.PageInfo;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.web.entity.WebUser;
 import com.baobei.attendance.web.entity.WebUserSearch;
+import com.baobei.attendance.web.mapper.SchoolMapper;
 import com.baobei.attendance.web.mapper.WebUserMapper;
 import com.baobei.attendance.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     WebUserMapper webUserMapper;
+
+    @Autowired
+    SchoolMapper schoolMapper;
 
     @Override
     public Result webLogin(String account, String password) {
@@ -50,11 +55,11 @@ public class UserServiceImpl implements UserService {
             if (classIds != null && classIds.size() > 0) {
                 webUserMapper.addWebUserManagements(user.getId(), classIds);
             }
-            List<Class> classes = webUserMapper.findWebUserClasses(classIds);
+            List<Class> classes = schoolMapper.findClassesByIds(classIds);
             user.setClasses(classes);
             Map<String, Object> data = new HashMap<>(1);
             data.put("user", user);
-            result = Result.retOk("success", data);
+            result = Result.retOk(data);
         }
         return result;
     }
@@ -68,15 +73,16 @@ public class UserServiceImpl implements UserService {
         } else {
             webUserMapper.updateWebUser(user);
             List<Long> classIds = user.getClassIds();
+            webUserMapper.deleteWebUserManagements(user.getId());
             if (classIds != null && classIds.size() > 0) {
-                webUserMapper.deleteWebUserManagements(user.getId());
                 webUserMapper.addWebUserManagements(user.getId(), classIds);
-                List<Class> classes = webUserMapper.findWebUserClasses(classIds);
+                List<Class> classes = schoolMapper.findClassesByIds(classIds);
                 user.setClasses(classes);
+                user.setClassIds(classIds);
             }
             Map<String, Object> data = new HashMap<>(1);
             data.put("user", user);
-            result = Result.retOk("success", data);
+            result = Result.retOk(data);
         }
         return result;
     }
@@ -98,11 +104,20 @@ public class UserServiceImpl implements UserService {
         try {
             Integer count = webUserMapper.findWebUserCountByCondition(search);
             List<WebUser> webUsers = webUserMapper.findWebUsersByCondition(search);
+            for (WebUser user : webUsers) {
+                List<Long> classIds = webUserMapper.findWebUserClassIds(user.getId());
+                List<Class> classes = new ArrayList<>();
+                if (classIds != null && classIds.size() != 0) {
+                    classes = schoolMapper.findClassesByIds(classIds);
+                }
+                user.setClasses(classes);
+                user.setClassIds(classIds);
+            }
             PageInfo pageInfo = PageInfo.getPageInfo(count, search.getPageSize());
             Map<String, Object> data = new HashMap<>(2);
             data.put("pageInfo", pageInfo);
             data.put("users", webUsers);
-            result = Result.retOk("success", data);
+            result = Result.retOk(data);
         } catch (Exception e) {
             result = Result.retFail(e.getMessage());
         }

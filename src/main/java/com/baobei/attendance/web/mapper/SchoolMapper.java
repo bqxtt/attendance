@@ -32,4 +32,12 @@ public interface SchoolMapper {
 
     List<Class> findAllClasses();
 
+    /**
+     * 获取管理班级
+     *
+     * @param classIds
+     * @return
+     */
+    List<Class> findClassesByIds(List<Long> classIds);
+
 }

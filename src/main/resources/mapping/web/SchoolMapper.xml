@@ -91,5 +91,11 @@
         from classes;
     </select>
 
-
+    <select id="findClassesByIds" parameterType="java.util.List" resultType="com.baobei.attendance.entity.Class">
+        select * from classes
+        where id in
+        <foreach collection="list" index="index" item="classId" open="(" separator="," close=")">
+            #{classId}
+        </foreach>
+    </select>
 </mapper>
