@@ -91,7 +91,7 @@ public class FaceRepoService {
         for (MultiSearchRes.Face face : faces) {
             List<MultiSearchRes.User> users = face.getUserList();
             if (users.size() == 0) {
-                throw new Exception("baidu ai error, user list is empty");
+                continue;
             }
             String studentNo = users.get(0).getUserId();
             students.add(studentNo);

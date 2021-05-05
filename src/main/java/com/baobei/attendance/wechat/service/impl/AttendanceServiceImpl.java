@@ -55,6 +55,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
         Claims claims = JWTUtil.parseToken(records.getToken());
         for (Record record : records.getRecords()) {
+            record.setRecordTime(new Date());
             if (!record.getUsername().equals(claims.get(record.getStudentNo()))) {
                 throw new Exception("verify token failed, token message modified");
             }

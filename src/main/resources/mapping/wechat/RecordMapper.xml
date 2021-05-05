@@ -7,7 +7,7 @@
         insert into records(student_id, class_id,student_no,username,record_time, photo_url)
         values
         <foreach collection="list" index="index" item="record" separator=",">
-            (#{studentId},#{classId},#{studentNo},#{username},#{recordTime},#{photoUrl})
+            (#{record.studentId},#{record.classId},#{record.studentNo},#{record.username},#{record.recordTime},#{record.photoUrl})
         </foreach>
     </insert>
 </mapper>
