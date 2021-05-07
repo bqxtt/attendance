@@ -30,6 +30,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     SchoolMapper schoolMapper;
 
+    private void getAdminClasses(WebUser user) {
+        List<Long> classIds = webUserMapper.findWebUserClassIds(user.getId());
+        List<Class> classes = new ArrayList<>();
+        if (classIds != null && classIds.size() != 0) {
+            classes = schoolMapper.findClassesByIds(classIds);
+        }
+        user.setClasses(classes);
+        user.setClassIds(classIds);
+    }
+
     @Override
     public Result webLogin(String account, String password) {
         Result result;
@@ -37,13 +47,16 @@ public class UserServiceImpl implements UserService {
         if (webUser == null || !webUser.getPassword().equals(password)) {
             result = Result.retFail("登录信息有误");
         } else {
-            //todo token
-            result = Result.retOk("success");
+            Map<String, Object> data = new HashMap<>(1);
+            this.getAdminClasses(webUser);
+            data.put("user", webUser);
+            result = Result.retOk(data);
         }
         return result;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result addAdmin(WebUser user) {
         Result result;
         WebUser existUser = webUserMapper.findWebUserByAccount(user.getAccount());
@@ -105,13 +118,7 @@ public class UserServiceImpl implements UserService {
             Integer count = webUserMapper.findWebUserCountByCondition(search);
             List<WebUser> webUsers = webUserMapper.findWebUsersByCondition(search);
             for (WebUser user : webUsers) {
-                List<Long> classIds = webUserMapper.findWebUserClassIds(user.getId());
-                List<Class> classes = new ArrayList<>();
-                if (classIds != null && classIds.size() != 0) {
-                    classes = schoolMapper.findClassesByIds(classIds);
-                }
-                user.setClasses(classes);
-                user.setClassIds(classIds);
+                this.getAdminClasses(user);
             }
             PageInfo pageInfo = PageInfo.getPageInfo(count, search.getPageSize());
             Map<String, Object> data = new HashMap<>(2);

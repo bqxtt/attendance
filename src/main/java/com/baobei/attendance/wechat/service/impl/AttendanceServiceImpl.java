@@ -93,4 +93,13 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
         return result;
     }
+
+    @Override
+    public Result queryRecord(Long studentId) {
+//        Result result;
+//        try {
+//            recordMapper.findRecordsByCondition()
+//        }
+        return null;
+    }
 }

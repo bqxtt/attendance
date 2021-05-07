@@ -18,6 +18,7 @@ public class WebUser {
     private String adminName;
     private String department;
     private String phone;
+    private Integer role;
     private List<Long> classIds;
     private List<Class> classes;
 }

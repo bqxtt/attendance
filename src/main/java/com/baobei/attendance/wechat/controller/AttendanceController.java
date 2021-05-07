@@ -35,4 +35,11 @@ public class AttendanceController {
         Result result = attendanceService.addStudentRecords(records);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @ApiOperation("查询今日打卡记录")
+    @GetMapping("/record/{studentId}")
+    public ResponseEntity<Result> queryRecord(@PathVariable Long studentId) {
+        Result result = attendanceService.queryRecord(studentId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }
