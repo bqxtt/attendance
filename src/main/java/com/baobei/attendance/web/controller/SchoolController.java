@@ -115,4 +115,11 @@ public class SchoolController {
         Result result = schoolService.getSchoolAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @ApiOperation("学生、辅导员、宿舍数量")
+    @GetMapping("/count")
+    public ResponseEntity<Result> getCount() {
+        Result result = schoolService.getCount();
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

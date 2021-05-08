@@ -50,4 +50,11 @@ public interface SchoolService {
      * @return
      */
     Result getSchoolAll();
+
+    /**
+     * 获取学生、辅导员、宿舍数量
+     *
+     * @return
+     */
+    Result getCount();
 }

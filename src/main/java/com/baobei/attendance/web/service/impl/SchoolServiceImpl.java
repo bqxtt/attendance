@@ -4,8 +4,14 @@ import com.baobei.attendance.entity.Class;
 import com.baobei.attendance.model.PageInfo;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.model.search.ClassSearch;
+import com.baobei.attendance.model.search.DormitorySearch;
+import com.baobei.attendance.model.search.StudentSearch;
 import com.baobei.attendance.web.entity.Cascader;
+import com.baobei.attendance.web.entity.WebUserSearch;
+import com.baobei.attendance.web.mapper.DormitoryMapper;
 import com.baobei.attendance.web.mapper.SchoolMapper;
+import com.baobei.attendance.web.mapper.StudentMapper;
+import com.baobei.attendance.web.mapper.WebUserMapper;
 import com.baobei.attendance.web.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +29,15 @@ import java.util.Map;
 public class SchoolServiceImpl implements SchoolService {
     @Autowired
     SchoolMapper schoolMapper;
+
+    @Autowired
+    StudentMapper studentMapper;
+
+    @Autowired
+    DormitoryMapper dormitoryMapper;
+
+    @Autowired
+    WebUserMapper webUserMapper;
 
     @Override
     public Result addClasses(List<Class> classes) {
@@ -128,6 +143,33 @@ public class SchoolServiceImpl implements SchoolService {
         Map<String, Object> data = new HashMap<>(1);
         data.put("options", cascaders);
         result = Result.retOk(data);
+        return result;
+    }
+
+    @Override
+    public Result getCount() {
+        Result result;
+        try {
+            StudentSearch studentSearch = new StudentSearch();
+            studentSearch.normalize();
+            Integer studentCount = studentMapper.findStudentCountByCondition(studentSearch);
+
+            WebUserSearch userSearch = new WebUserSearch();
+            userSearch.normalize();
+            Integer userCount = webUserMapper.findWebUserCountByCondition(userSearch);
+
+            DormitorySearch dormSearch = new DormitorySearch();
+            dormSearch.normalize();
+            Integer dormCount = dormitoryMapper.findDormitoryCountByCondition(dormSearch);
+
+            Map<String, Object> data = new HashMap<>(3);
+            data.put("studentCount", studentCount);
+            data.put("adminCount", userCount);
+            data.put("dormitoryCount", dormCount);
+            result = Result.retOk(data);
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
         return result;
     }
 }
