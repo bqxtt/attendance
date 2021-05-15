@@ -79,6 +79,9 @@ public class RecordServiceImpl implements RecordService {
             Date now = new Date();
             result = studentService.getStudents(search);
             List<Student> students = (List<Student>) result.getData().get("students");
+            if (students.size() == 0) {
+                return result;
+            }
             List<Long> studentIds = new ArrayList<>();
             Map<Long, Student> studentMap = new HashMap<>(students.size());
             for (Student student : students) {
