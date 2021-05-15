@@ -1,18 +1,25 @@
-package com.baobei.attendance.model;
+package com.baobei.attendance.model.search;
 
 import com.baobei.attendance.utils.DateUtil;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
 /**
- * @author 14861
+ * @author tcg
+ * @date 2021/5/13
  */
 @Data
-public class RecordCondition {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@ApiModel
+public class RecordSearch extends Search {
     private String studentNo;
     private String username;
     @ApiModelProperty(hidden = true)
@@ -24,7 +31,9 @@ public class RecordCondition {
     @ApiModelProperty(hidden = true)
     private Date endTime;
 
+    @Override
     public void normalize() {
+        super.normalize();
         if ("".equals(studentNo)) {
             studentNo = null;
         }

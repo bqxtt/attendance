@@ -33,10 +33,10 @@ public interface StudentMapper {
     /**
      * 获取班级学生
      *
-     * @param classId
+     * @param classIds
      * @return
      */
-    List<Student> findStudentsByClassId(Long classId);
+    List<Student> findStudentsByClassIds(List<Long> classIds);
 
     /**
      * 数量 分页

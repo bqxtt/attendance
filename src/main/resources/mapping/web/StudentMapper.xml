@@ -26,6 +26,12 @@
             <if test="classId != null">
                 AND class_id = #{classId}
             </if>
+            <if test="classIds != null">
+                AND class_id in
+                <foreach collection="classIds" item="classId" index="index" open="(" separator="," close=")">
+                    #{classId}
+                </foreach>
+            </if>
         </where>
         limit #{offset},#{limit}
     </select>
@@ -52,6 +58,12 @@
             </if>
             <if test="classId != null">
                 AND class_id = #{classId}
+            </if>
+            <if test="classIds != null">
+                AND class_id in
+                <foreach collection="classIds" item="classId" index="index" open="(" separator="," close=")">
+                    #{classId}
+                </foreach>
             </if>
         </where>
     </select>
@@ -141,9 +153,13 @@
         where dormitory_id = #{dormitoryId}
     </select>
 
-    <select id="findStudentsByClassId" parameterType="java.lang.Long" resultType="com.baobei.attendance.entity.Student">
+    <select id="findStudentsByClassIds" parameterType="java.lang.Long"
+            resultType="com.baobei.attendance.entity.Student">
         select *
         from students
-        where class_id = #{classId}
+        where class_id in
+        <foreach collection="list" item="classId" index="index" open="(" separator="," close=")">
+            #{classId}
+        </foreach>
     </select>
 </mapper>

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -19,7 +20,17 @@ public class Record {
     private String studentNo;
     private String username;
     private Long classId;
+    private Long dormitoryId;
     @ApiModelProperty(hidden = true)
     private Date recordTime;
+    private String recordTimeFormat;
     private String photoUrl;
+
+    public String getRecordTimeFormat() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (recordTime != null) {
+            return formatter.format(recordTime);
+        }
+        return "";
+    }
 }

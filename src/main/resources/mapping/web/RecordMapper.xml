@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baobei.attendance.web.mapper.WebRecordMapper">
+    <select id="findRecordsByCondition" parameterType="com.baobei.attendance.model.RecordCondition"
+            resultType="com.baobei.attendance.entity.Record">
+        select * from records
+        <where>
+            <if test="studentNo != null">
+                sudent_no like concat('%',#{sudentNo},'%')
+            </if>
+            <if test="username != null">
+                AND username like concat('%',#{username},'%')
+            </if>
+            <if test="studentIds != null">
+                AND student_id in
+                <foreach collection="studentIds" item="studentId" index="index" open="(" separator="," close=")">
+                    #{studentId}
+                </foreach>
+            </if>
+            <if test="classIds != null">
+                AND class_id in
+                <foreach collection="classIds" item="classId" index="index" open="(" separator="," close=")">
+                    #{classId}
+                </foreach>
+            </if>
+            <if test="dormitoryIds != null">
+                AND dormitory_id in
+                <foreach collection="dormitoryIds" item="dormitoryId" index="index" open="(" separator="," close=")">
+                    #{dormitoryId}
+                </foreach>
+            </if>
+            <if test="startTime != null">
+                AND #{startTime} <![CDATA[ <= ]]> record_time
+            </if>
+            <if test="endTime != null">
+                AND record_time <![CDATA[ < ]]> #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="findRecordsCountByCondition" parameterType="com.baobei.attendance.model.RecordCondition"
+            resultType="java.lang.Integer">
+        select count(*) from records
+        <where>
+            <if test="studentNo != null">
+                sudent_no like concat('%',#{sudentNo},'%')
+            </if>
+            <if test="username != null">
+                AND username like concat('%',#{username},'%')
+            </if>
+            <if test="studentIds != null">
+                AND student_id in
+                <foreach collection="studentIds" item="studentId" index="index" open="(" separator="," close=")">
+                    #{studentId}
+                </foreach>
+            </if>
+            <if test="classIds != null">
+                AND class_id in
+                <foreach collection="classIds" item="classId" index="index" open="(" separator="," close=")">
+                    #{classId}
+                </foreach>
+            </if>
+            <if test="dormitoryIds != null">
+                AND dormitory_id in
+                <foreach collection="dormitoryIds" item="dormitoryId" index="index" open="(" separator="," close=")">
+                    #{dormitoryId}
+                </foreach>
+            </if>
+            <if test="startTime != null">
+                AND #{startTime} <![CDATA[ <= ]]> record_time
+            </if>
+            <if test="endTime != null">
+                AND record_time <![CDATA[ < ]]> #{endTime}
+            </if>
+        </where>
+    </select>
+</mapper>

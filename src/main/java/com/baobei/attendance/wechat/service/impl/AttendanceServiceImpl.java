@@ -2,10 +2,12 @@ package com.baobei.attendance.wechat.service.impl;
 
 import com.baobei.attendance.entity.Record;
 import com.baobei.attendance.entity.Student;
+import com.baobei.attendance.model.RecordCondition;
 import com.baobei.attendance.model.Result;
 import com.baobei.attendance.service.FaceRepoService;
 import com.baobei.attendance.utils.JWTUtil;
 import com.baobei.attendance.web.mapper.StudentMapper;
+import com.baobei.attendance.web.mapper.WebRecordMapper;
 import com.baobei.attendance.wechat.entity.Records;
 import com.baobei.attendance.wechat.mapper.RecordMapper;
 import com.baobei.attendance.wechat.service.AttendanceService;
@@ -29,6 +31,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     StudentMapper studentMapper;
     @Autowired
     RecordMapper recordMapper;
+    @Autowired
+    WebRecordMapper webRecordMapper;
 
     private String getFilepath(String filename) {
         int pos = filename.lastIndexOf(".");
@@ -55,7 +59,6 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
         Claims claims = JWTUtil.parseToken(records.getToken());
         for (Record record : records.getRecords()) {
-            record.setRecordTime(new Date());
             if (!record.getUsername().equals(claims.get(record.getStudentNo()))) {
                 throw new Exception("verify token failed, token message modified");
             }
@@ -85,8 +88,30 @@ public class AttendanceServiceImpl implements AttendanceService {
     public Result addStudentRecords(Records records) {
         Result result;
         try {
-            verifyToken(records);
-            recordMapper.addStudentRecords(records.getRecords());
+            //verifyToken(records);
+            List<Long> studentIds = new ArrayList<>();
+            for (Record record : records.getRecords()) {
+                record.setRecordTime(new Date());
+                studentIds.add(record.getStudentId());
+            }
+            RecordCondition condition = new RecordCondition();
+            condition.setStudentIds(studentIds);
+            condition.normalizeWithDate(0);
+            List<Record> hasRecords = webRecordMapper.findRecordsByCondition(condition);
+            Map<Long, Record> stuRecord = new HashMap<>(hasRecords.size());
+            for (Record record : hasRecords) {
+                stuRecord.put(record.getStudentId(), record);
+            }
+            List<Record> needRecords = new ArrayList<>();
+            for (Record record : records.getRecords()) {
+                if (stuRecord.containsKey(record.getStudentId())) {
+                    continue;
+                }
+                needRecords.add(record);
+            }
+            if (needRecords.size() > 0) {
+                recordMapper.addStudentRecords(needRecords);
+            }
             result = Result.retOk("success");
         } catch (Exception e) {
             result = Result.retFail(e.getMessage());
@@ -96,10 +121,21 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public Result queryRecord(Long studentId) {
-//        Result result;
-//        try {
-//            recordMapper.findRecordsByCondition()
-//        }
-        return null;
+        Result result;
+        try {
+            RecordCondition condition = new RecordCondition();
+            List<Long> studentIds = new ArrayList<>();
+            studentIds.add(studentId);
+            condition.setStudentIds(studentIds);
+            condition.normalizeWithDate(0);
+            Integer count = webRecordMapper.findRecordsCountByCondition(condition);
+            Boolean status = (count > 0);
+            Map<String, Object> data = new HashMap<>(1);
+            data.put("status", status);
+            result = Result.retOk(data);
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
+        return result;
     }
 }

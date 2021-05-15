@@ -30,4 +30,13 @@ public class Student {
     private Integer sex;
     private String address;
     private String faceUrl;
+    private Record[] records;
+    private Boolean recordStatus;
+
+    public Boolean getRecordStatus() {
+        if (recordStatus == null) {
+            recordStatus = false;
+        }
+        return recordStatus;
+    }
 }

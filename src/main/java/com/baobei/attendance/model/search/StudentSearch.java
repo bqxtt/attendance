@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @author tcg
  * @date 2021/4/15
@@ -18,6 +20,7 @@ public class StudentSearch extends Search {
     private String departmentName;
     private String majorName;
     private Long classId;
+    private List<Long> classIds;
 
     @Override
     public void normalize() {
@@ -39,6 +42,9 @@ public class StudentSearch extends Search {
         }
         if (classId == null || classId == 0) {
             classId = null;
+        }
+        if (classIds == null || classIds.size() == 0) {
+            classIds = null;
         }
     }
 

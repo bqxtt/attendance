@@ -33,7 +33,7 @@ public interface SchoolMapper {
     List<Class> findAllClasses();
 
     /**
-     * 获取管理班级
+     * 获取班级by ids
      *
      * @param classIds
      * @return
