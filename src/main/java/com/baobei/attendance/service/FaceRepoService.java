@@ -1,8 +1,8 @@
 package com.baobei.attendance.service;
 
-import com.baobei.attendance.ai.baidu.api.FaceDeleteApi;
-import com.baobei.attendance.ai.baidu.api.MultiSearchApi;
-import com.baobei.attendance.ai.baidu.api.UserAddApi;
+import com.alibaba.fastjson.JSON;
+import com.baobei.attendance.ai.baidu.api.*;
+import com.baobei.attendance.ai.baidu.api.entity.Brief;
 import com.baobei.attendance.ai.baidu.api.entity.ImageType;
 import com.baobei.attendance.ai.baidu.factory.BaiduApiFactory;
 import com.baobei.attendance.config.bean.OSSClient;
@@ -56,7 +56,7 @@ public class FaceRepoService {
         req.setActionType(UserAddApi.UserAddReq.ActionType.REPLACE.name());
         req.setGroupId(groupID);
         UserAddApi.UserAddRes res = api.request(req);
-        if (res.getErrorCode() != 0) {
+        if (res.getErrorCode() != null && res.getErrorCode() != 0) {
             throw new Exception(res.getErrorMsg());
         }
         return res.getResult().getFaceToken();
@@ -69,7 +69,7 @@ public class FaceRepoService {
         req.setFaceToken(faceToken);
         req.setGroupId(groupID);
         FaceDeleteApi.FaceDeleteRes res = api.request(req);
-        if (res.getErrorCode() != 0) {
+        if (res.getErrorCode() != null && res.getErrorCode() != 0) {
             throw new Exception(res.getErrorMsg());
         }
     }
@@ -83,7 +83,7 @@ public class FaceRepoService {
         req.setMaxFaceNum(4);
         req.setMaxUserNum(4);
         MultiSearchApi.MultiSearchRes res = api.request(req);
-        if (res.getErrorCode() != 0) {
+        if (res.getErrorCode() != null && res.getErrorCode() != 0) {
             throw new Exception(res.getErrorMsg());
         }
         MultiSearchApi.MultiSearchRes.Result result = res.getResult();
@@ -100,5 +100,30 @@ public class FaceRepoService {
         return students;
     }
 
-//    public void samePicSearch()
+    public Brief samePicSearch(String url) throws Exception {
+        SamePicSearchApi api = baiduApiFactory.getSamePicSearchApi();
+        SamePicSearchApi.SamePicSearchReq req = new SamePicSearchApi.SamePicSearchReq();
+        req.setUrl(url);
+        SamePicSearchApi.SamePicSearchRes res = api.request(req);
+        if (res.getErrorCode() != null && res.getErrorCode() != 0) {
+            throw new Exception(res.getErrorMsg());
+        }
+        if (res.getResults().size() == 0) {
+            return null;
+        }
+        Brief brief = JSON.parseObject(res.getResults().get(0).getBrief(), Brief.class);
+        brief.setScore(res.getResults().get(0).getScore());
+        return brief;
+    }
+
+    public void samePicAdd(String url, Brief brief) throws Exception {
+        SamePicAddApi api = baiduApiFactory.getSamePicAddApi();
+        SamePicAddApi.SamePicAddReq req = new SamePicAddApi.SamePicAddReq();
+        req.setUrl(url);
+        req.setBrief(JSON.toJSONString(brief));
+        SamePicAddApi.SamePicAddRes res = api.request(req);
+        if (res.getErrorCode() != null && res.getErrorCode() != 0) {
+            throw new Exception(res.getErrorMsg());
+        }
+    }
 }   

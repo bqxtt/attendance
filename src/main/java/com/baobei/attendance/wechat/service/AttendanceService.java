@@ -14,4 +14,8 @@ public interface AttendanceService {
     Result addStudentRecords(Records records);
 
     Result queryRecord(Long studentId);
+
+    Result samePicAdd(MultipartFile picture);
+
+    Result samePicSearch(MultipartFile picture);
 }

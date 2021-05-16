@@ -1,6 +1,7 @@
 package com.baobei.attendance.wechat.controller;
 
 import com.baobei.attendance.model.Result;
+import com.baobei.attendance.service.FaceRepoService;
 import com.baobei.attendance.wechat.entity.Records;
 import com.baobei.attendance.wechat.service.AttendanceService;
 import io.swagger.annotations.Api;
@@ -40,6 +41,23 @@ public class AttendanceController {
     @GetMapping("/record/{studentId}")
     public ResponseEntity<Result> queryRecord(@PathVariable Long studentId) {
         Result result = attendanceService.queryRecord(studentId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @Autowired
+    FaceRepoService faceRepoService;
+
+    @ApiOperation("新增重复照片")
+    @PostMapping("/test/record/same/pic/add")
+    public ResponseEntity<Result> samePicAdd(@RequestParam("picture") MultipartFile picture) {
+        Result result = attendanceService.samePicAdd(picture);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @ApiOperation("判断重复照片")
+    @PostMapping("/test/record/same/pic/search")
+    public ResponseEntity<Result> samePicSearch(@RequestParam("picture") MultipartFile picture) {
+        Result result = attendanceService.samePicSearch(picture);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

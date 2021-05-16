@@ -44,6 +44,14 @@ public class Result {
         res.setMessage(message);
         return res;
     }
+
+    public static Result retFail(String message, Map<String, Object> data) {
+        Result res = new Result();
+        res.setStatus(ReplyStatus.FAILED.name());
+        res.setMessage(message);
+        res.setData(data);
+        return res;
+    }
 }
 
 

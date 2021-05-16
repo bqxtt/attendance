@@ -24,4 +24,6 @@ public class BaiduApiFactory {
     private SamePicAddApi samePicAddApi;
     @Autowired
     private SamePicSearchApi samePicSearchApi;
+    @Autowired
+    private SamePicDeleteApi samePicDeleteApi;
 }

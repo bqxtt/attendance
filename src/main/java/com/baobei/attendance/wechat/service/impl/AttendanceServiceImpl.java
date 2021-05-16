@@ -1,5 +1,6 @@
 package com.baobei.attendance.wechat.service.impl;
 
+import com.baobei.attendance.ai.baidu.api.entity.Brief;
 import com.baobei.attendance.entity.Record;
 import com.baobei.attendance.entity.Student;
 import com.baobei.attendance.model.RecordCondition;
@@ -71,10 +72,16 @@ public class AttendanceServiceImpl implements AttendanceService {
         try {
             String filePath = getFilepath(Objects.requireNonNull(photo.getOriginalFilename()));
             String url = faceRepoService.uploadToOss(photo, filePath);
-
+            Map<String, Object> data = new HashMap<>(3);
+            //检测照片是否使用过
+            Brief brief = faceRepoService.samePicSearch(url);
+            if (brief != null && brief.getScore() > 0.9) {
+                data.put("brief", brief);
+                result = Result.retFail("照片已于" + brief.getRecordTime() + "使用过", data);
+                return result;
+            }
             List<String> studentNos = faceRepoService.faceMultiSearch(url);
             List<Student> students = studentMapper.findStudentByStuNos(studentNos);
-            Map<String, Object> data = new HashMap<>(3);
             data.put("students", students);
             data.put("token", JWTUtil.generateToken(getClaims(students)));
             data.put("url", url);
@@ -88,11 +95,12 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public Result addStudentRecords(Records records) {
         Result result;
+        Date now = new Date();
         try {
             //verifyToken(records);
             List<Long> studentIds = new ArrayList<>();
             for (Record record : records.getRecords()) {
-                record.setRecordTime(new Date());
+                record.setRecordTime(now);
                 studentIds.add(record.getStudentId());
             }
             RecordCondition condition = new RecordCondition();
@@ -112,6 +120,10 @@ public class AttendanceServiceImpl implements AttendanceService {
             }
             if (needRecords.size() > 0) {
                 recordMapper.addStudentRecords(needRecords);
+                //保存使用过的打卡照片
+                Brief brief = new Brief();
+                brief.setRecordTime(new SimpleDateFormat("yyyy-MM-dd").format(now));
+                faceRepoService.samePicAdd(needRecords.get(0).getPhotoUrl(), brief);
             }
             result = Result.retOk("success");
         } catch (Exception e) {
@@ -133,6 +145,36 @@ public class AttendanceServiceImpl implements AttendanceService {
             Boolean status = (count > 0);
             Map<String, Object> data = new HashMap<>(1);
             data.put("status", status);
+            result = Result.retOk(data);
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result samePicAdd(MultipartFile picture) {
+        Result result;
+        try {
+            String url = faceRepoService.uploadToOss(picture, getFilepath(Objects.requireNonNull(picture.getOriginalFilename())));
+            Brief brief = new Brief();
+            brief.setRecordTime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            faceRepoService.samePicAdd(url, brief);
+            result = Result.retOk("success");
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Result samePicSearch(MultipartFile picture) {
+        Result result;
+        try {
+            String url = faceRepoService.uploadToOss(picture, getFilepath(Objects.requireNonNull(picture.getOriginalFilename())));
+            Brief brief = faceRepoService.samePicSearch(url);
+            Map<String, Object> data = new HashMap<>(1);
+            data.put("brief", brief);
             result = Result.retOk(data);
         } catch (Exception e) {
             result = Result.retFail(e.getMessage());

@@ -19,7 +19,7 @@ class SamePicSearchApiTest {
     void request() throws Exception {
         SamePicSearchApi api = baiduApiFactory.getSamePicSearchApi();
         SamePicSearchApi.SamePicSearchReq req = new SamePicSearchApi.SamePicSearchReq();
-        req.setUrl("https://student-faces-repo.oss-cn-shanghai.aliyuncs.com/faces/170950212_1621096125038.png");
+        req.setUrl("https://student-faces-repo.oss-cn-shanghai.aliyuncs.com/faces/170950212_1621097047450.jpg");
         SamePicSearchApi.SamePicSearchRes res = api.request(req);
         System.out.println(res);
     }
