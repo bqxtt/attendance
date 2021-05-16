@@ -5,6 +5,7 @@ import com.baobei.attendance.config.bean.Config;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +31,7 @@ public class TokenUtil {
             .build(
                     new CacheLoader<String, String>() {
                         @Override
-                        public String load(String key) throws Exception {
+                        public String load(@NotNull String key) throws Exception {
                             return loadToken();
                         }
                     }

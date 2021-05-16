@@ -21,8 +21,6 @@ public abstract class Api<RQ, RS> {
     protected final Map<String, Object> headers = new HashMap<>();
 
     public Api() {
-//        httpUtil = (HttpUtil) SpringContextUtil.getBean("httpUtil");
-//        tokenUtil = (TokenUtil) SpringContextUtil.getBean("tokenUtil");
         headers.put("Content-Type", "application/json");
     }
 

@@ -12,6 +12,7 @@ import java.util.Objects;
 @Component
 public class HttpUtil {
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
+    public static final MediaType MEDIA_TYPE_URLENCODED = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
     @Autowired
     OkHttpClient httpClient;
 
@@ -31,8 +32,7 @@ public class HttpUtil {
         }
     }
 
-    public String post(String url, BaseReq params, Map<String, Object> headers) throws Exception {
-        RequestBody body = RequestBody.create(JSON.toJSONString(params), MEDIA_TYPE_JSON);
+    private String doPost(String url, Map<String, Object> headers, RequestBody requestBody) throws Exception {
         Headers.Builder headersBuilder = new Headers.Builder();
         if (headers != null) {
             for (Map.Entry<String, Object> entry : headers.entrySet()) {
@@ -44,7 +44,7 @@ public class HttpUtil {
                 .Builder()
                 .url(url)
                 .headers(headers1)
-                .post(body)
+                .post(requestBody)
                 .build();
         Call call = httpClient.newCall(request);
         Response response = call.execute();
@@ -53,5 +53,17 @@ public class HttpUtil {
         } else {
             throw new Exception("http util post failed");
         }
+    }
+
+    public String postJson(String url, BaseReq params, Map<String, Object> headers) throws Exception {
+        RequestBody body = RequestBody.create(params.toJsonString(), MEDIA_TYPE_JSON);
+        headers.put("Content-Type", "application/json");
+        return doPost(url, headers, body);
+    }
+
+    public String postUrl(String url, BaseReq params, Map<String, Object> headers) throws Exception {
+        RequestBody body = RequestBody.create(params.toUrlString(), MEDIA_TYPE_URLENCODED);
+        headers.put("Content-Type", "application/x-www-form-urlencoded");
+        return doPost(url, headers, body);
     }
 }

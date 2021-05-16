@@ -3,7 +3,7 @@ package com.baobei.attendance.service;
 import com.baobei.attendance.ai.baidu.api.FaceDeleteApi;
 import com.baobei.attendance.ai.baidu.api.MultiSearchApi;
 import com.baobei.attendance.ai.baidu.api.UserAddApi;
-import com.baobei.attendance.ai.baidu.api.entity.*;
+import com.baobei.attendance.ai.baidu.api.entity.ImageType;
 import com.baobei.attendance.ai.baidu.factory.BaiduApiFactory;
 import com.baobei.attendance.config.bean.OSSClient;
 import org.slf4j.Logger;
@@ -49,12 +49,13 @@ public class FaceRepoService {
 
     public String adUserFace(String userId, String url) throws Exception {
         UserAddApi api = baiduApiFactory.getUserAddApi();
-        UserAddReq req = new UserAddReq();
+        UserAddApi.UserAddReq req = new UserAddApi.UserAddReq();
         req.setUserId(userId);
         req.setImage(url);
         req.setImageType(ImageType.URL.name());
+        req.setActionType(UserAddApi.UserAddReq.ActionType.REPLACE.name());
         req.setGroupId(groupID);
-        UserAddRes res = api.request(req);
+        UserAddApi.UserAddRes res = api.request(req);
         if (res.getErrorCode() != 0) {
             throw new Exception(res.getErrorMsg());
         }
@@ -63,11 +64,11 @@ public class FaceRepoService {
 
     public void deleteUserFace(String userId, String faceToken) throws Exception {
         FaceDeleteApi api = baiduApiFactory.getFaceDeleteApi();
-        FaceDeleteReq req = new FaceDeleteReq();
+        FaceDeleteApi.FaceDeleteReq req = new FaceDeleteApi.FaceDeleteReq();
         req.setUserId(userId);
         req.setFaceToken(faceToken);
         req.setGroupId(groupID);
-        FaceDeleteRes res = api.request(req);
+        FaceDeleteApi.FaceDeleteRes res = api.request(req);
         if (res.getErrorCode() != 0) {
             throw new Exception(res.getErrorMsg());
         }
@@ -75,21 +76,21 @@ public class FaceRepoService {
 
     public List<String> faceMultiSearch(String url) throws Exception {
         MultiSearchApi api = baiduApiFactory.getMultiSearchApi();
-        MultiSearchReq req = new MultiSearchReq();
+        MultiSearchApi.MultiSearchReq req = new MultiSearchApi.MultiSearchReq();
         req.setGroupIdList(groupID);
         req.setImage(url);
         req.setImageType(ImageType.URL.name());
         req.setMaxFaceNum(4);
         req.setMaxUserNum(4);
-        MultiSearchRes res = api.request(req);
+        MultiSearchApi.MultiSearchRes res = api.request(req);
         if (res.getErrorCode() != 0) {
             throw new Exception(res.getErrorMsg());
         }
-        MultiSearchRes.Result result = res.getResult();
-        List<MultiSearchRes.Face> faces = result.getFaceList();
+        MultiSearchApi.MultiSearchRes.Result result = res.getResult();
+        List<MultiSearchApi.MultiSearchRes.Face> faces = result.getFaceList();
         List<String> students = new ArrayList<>();
-        for (MultiSearchRes.Face face : faces) {
-            List<MultiSearchRes.User> users = face.getUserList();
+        for (MultiSearchApi.MultiSearchRes.Face face : faces) {
+            List<MultiSearchApi.MultiSearchRes.User> users = face.getUserList();
             if (users.size() == 0) {
                 continue;
             }
@@ -98,4 +99,6 @@ public class FaceRepoService {
         }
         return students;
     }
+
+//    public void samePicSearch()
 }   

@@ -71,6 +71,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         try {
             String filePath = getFilepath(Objects.requireNonNull(photo.getOriginalFilename()));
             String url = faceRepoService.uploadToOss(photo, filePath);
+
             List<String> studentNos = faceRepoService.faceMultiSearch(url);
             List<Student> students = studentMapper.findStudentByStuNos(studentNos);
             Map<String, Object> data = new HashMap<>(3);

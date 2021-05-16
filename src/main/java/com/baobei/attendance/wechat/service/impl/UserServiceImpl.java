@@ -27,10 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author tcg
@@ -58,6 +55,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     DormitoryMapper dormitoryMapper;
+
+    @Resource(name = "webUserService")
+    com.baobei.attendance.web.service.UserService webUserService;
 
     @Override
     public Result getUserOpenId(String userCode) {
@@ -128,6 +128,7 @@ public class UserServiceImpl implements UserService {
                 weChatUser.setWebUserId(user.getId());
                 weChatUser.setOpenId(openId);
                 weChatUserMapper.updateWeChatUserByOpenId(weChatUser);
+                this.getAdminClasses(user);
                 Map<String, Object> data = new HashMap<>(1);
                 weChatUser.setWebUser(user);
                 data.put("user", weChatUser);
@@ -169,6 +170,7 @@ public class UserServiceImpl implements UserService {
                 user.setStudent(student);
             } else if (status.equals(UserStatus.TEACHER.getCode())) {
                 WebUser teacher = webUserMapper.findWebUserByWebUserId(user.getWebUserId());
+                this.getAdminClasses(teacher);
                 user.setWebUser(teacher);
             }
             Map<String, Object> data = new HashMap<>(1);
@@ -189,5 +191,15 @@ public class UserServiceImpl implements UserService {
             result = Result.retOk("success");
         }
         return result;
+    }
+
+    private void getAdminClasses(WebUser user) {
+        List<Long> classIds = webUserMapper.findWebUserClassIds(user.getId());
+        List<Class> classes = new ArrayList<>();
+        if (classIds != null && classIds.size() != 0) {
+            classes = schoolMapper.findClassesByIds(classIds);
+        }
+        user.setClasses(classes);
+        user.setClassIds(classIds);
     }
 }

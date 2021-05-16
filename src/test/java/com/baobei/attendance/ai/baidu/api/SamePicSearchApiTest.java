@@ -5,18 +5,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+/**
+ * @author tcg
+ * @date 2021/5/16
+ */
 @SpringBootTest
-class GroupAddApiTest {
+class SamePicSearchApiTest {
 
     @Autowired
     BaiduApiFactory baiduApiFactory;
 
     @Test
     void request() throws Exception {
-        GroupAddApi api = baiduApiFactory.getGroupAddApi();
-        GroupAddApi.GroupAddReq req = new GroupAddApi.GroupAddReq();
-        req.setGroupId("hbgc_students");
-        GroupAddApi.GroupAddRes res = api.request(req);
+        SamePicSearchApi api = baiduApiFactory.getSamePicSearchApi();
+        SamePicSearchApi.SamePicSearchReq req = new SamePicSearchApi.SamePicSearchReq();
+        req.setUrl("https://student-faces-repo.oss-cn-shanghai.aliyuncs.com/faces/170950212_1621096125038.png");
+        SamePicSearchApi.SamePicSearchRes res = api.request(req);
         System.out.println(res);
     }
 }

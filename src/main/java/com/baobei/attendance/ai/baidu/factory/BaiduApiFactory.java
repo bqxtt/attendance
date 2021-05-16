@@ -20,4 +20,8 @@ public class BaiduApiFactory {
     private UserAddApi userAddApi;
     @Autowired
     private FaceDeleteApi faceDeleteApi;
+    @Autowired
+    private SamePicAddApi samePicAddApi;
+    @Autowired
+    private SamePicSearchApi samePicSearchApi;
 }
