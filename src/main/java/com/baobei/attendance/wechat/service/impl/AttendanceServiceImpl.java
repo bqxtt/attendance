@@ -141,10 +141,13 @@ public class AttendanceServiceImpl implements AttendanceService {
             studentIds.add(studentId);
             condition.setStudentIds(studentIds);
             condition.normalizeWithDate(0);
-            Integer count = webRecordMapper.findRecordsCountByCondition(condition);
-            Boolean status = (count > 0);
+            List<Record> records = webRecordMapper.findRecordsByCondition(condition);
+            Boolean status = (records.size() > 0);
             Map<String, Object> data = new HashMap<>(1);
             data.put("status", status);
+            if (status) {
+                data.put("record", records.get(0));
+            }
             result = Result.retOk(data);
         } catch (Exception e) {
             result = Result.retFail(e.getMessage());
