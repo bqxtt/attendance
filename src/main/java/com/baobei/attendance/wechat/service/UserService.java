@@ -53,4 +53,12 @@ public interface UserService {
      * @return
      */
     Result updateStudentInfo(Long studentId, StudentInfo studentInfo);
+
+    /**
+     * 删除绑定信息
+     *
+     * @param openId
+     * @return
+     */
+    Result deleteBindInfo(String openId);
 }

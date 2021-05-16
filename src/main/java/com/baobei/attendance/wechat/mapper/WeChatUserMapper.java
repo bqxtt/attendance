@@ -61,4 +61,19 @@ public interface WeChatUserMapper {
      */
     Integer updateStudentInfo(StudentInfo studentInfo);
 
+    /**
+     * 根据绑定学生查找
+     *
+     * @param studentId
+     * @return
+     */
+    WeChatUser findWeChatUserByStudentId(Long studentId);
+
+    /**
+     * 根据绑定老师查找
+     *
+     * @param webUserId
+     * @return
+     */
+    WeChatUser findWeChatUserByWebUserId(Long webUserId);
 }

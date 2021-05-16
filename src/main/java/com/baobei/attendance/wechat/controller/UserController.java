@@ -65,4 +65,11 @@ public class UserController {
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @ApiOperation("解除绑定")
+    @DeleteMapping("/bind/info/")
+    public ResponseEntity<Result> bindInfoDelete(@RequestParam String openId) {
+        Result result = userService.deleteBindInfo(openId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

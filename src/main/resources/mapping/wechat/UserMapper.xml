@@ -51,4 +51,15 @@
         where id = #{id}
     </update>
 
+    <select id="findWeChatUserByStudentId" resultType="com.baobei.attendance.wechat.entity.WeChatUser">
+        select *
+        from wx_users
+        where student_id = #{studentId}
+    </select>
+
+    <select id="findWeChatUserByWebUserId" resultType="com.baobei.attendance.wechat.entity.WeChatUser">
+        select *
+        from wx_users
+        where web_user_id = #{webUserId}
+    </select>
 </mapper>

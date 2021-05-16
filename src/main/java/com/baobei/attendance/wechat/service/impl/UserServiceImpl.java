@@ -56,9 +56,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     DormitoryMapper dormitoryMapper;
 
-    @Resource(name = "webUserService")
-    com.baobei.attendance.web.service.UserService webUserService;
-
     @Override
     public Result getUserOpenId(String userCode) {
         WeChatConfig weChatConfig = config.getWeChatConfig();
@@ -91,26 +88,36 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result bindStudentInfo(String openId, String username, String stuNo) {
         Result result;
-        Student student = weChatUserMapper.findStudentByStudentNo(stuNo);
-        if (student == null || !student.getUsername().equals(username)) {
-            result = Result.retFail("学生信息不存在");
-        } else {
-            try {
-                WeChatUser user = weChatUserMapper.findWeChatUserByOpenId(openId);
-                user.setStudentId(student.getId());
-                user.setStatus(UserStatus.STUDENT.getCode());
-                weChatUserMapper.updateWeChatUserByOpenId(user);
-                Class clazz = schoolMapper.findClassById(student.getClassId());
-                Dormitory dormitory = dormitoryMapper.findDormitoryById(student.getDormitoryId());
-                student.setDormitory(dormitory);
-                student.setAClass(clazz);
-                Map<String, Object> data = new HashMap<>(1);
-                user.setStudent(student);
-                data.put("user", user);
-                result = Result.retOk(data);
-            } catch (Exception e) {
-                result = Result.retFail(e.getMessage());
+        try {
+            Student student = weChatUserMapper.findStudentByStudentNo(stuNo);
+            if (student == null || !student.getUsername().equals(username)) {
+                result = Result.retFail("学生信息不存在");
+                return result;
             }
+            //查找该学生是否被绑定过
+            WeChatUser hasBind = weChatUserMapper.findWeChatUserByStudentId(student.getId());
+            if (hasBind != null) {
+                result = Result.retFail("该学生已被绑定");
+                return result;
+            }
+            WeChatUser user = weChatUserMapper.findWeChatUserByOpenId(openId);
+            if (user == null) {
+                result = Result.retFail("openid有误，请先登录");
+                return result;
+            }
+            user.setStudentId(student.getId());
+            user.setStatus(UserStatus.STUDENT.getCode());
+            weChatUserMapper.updateWeChatUserByOpenId(user);
+            Class clazz = schoolMapper.findClassById(student.getClassId());
+            Dormitory dormitory = dormitoryMapper.findDormitoryById(student.getDormitoryId());
+            student.setDormitory(dormitory);
+            student.setAClass(clazz);
+            Map<String, Object> data = new HashMap<>(1);
+            user.setStudent(student);
+            data.put("user", user);
+            result = Result.retOk(data);
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
         }
         return result;
     }
@@ -118,25 +125,36 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result bindTeacherInfo(String openId, String account, String password) {
         Result result;
-        WebUser user = webUserMapper.findWebUserByAccount(account);
-        if (user == null || !user.getPassword().equals(password)) {
-            result = Result.retFail("管理员信息不存在");
-        } else {
-            try {
-                WeChatUser weChatUser = weChatUserMapper.findWeChatUserByOpenId(openId);
-                weChatUser.setStatus(UserStatus.TEACHER.ordinal());
-                weChatUser.setWebUserId(user.getId());
-                weChatUser.setOpenId(openId);
-                weChatUserMapper.updateWeChatUserByOpenId(weChatUser);
-                this.getAdminClasses(user);
-                Map<String, Object> data = new HashMap<>(1);
-                weChatUser.setWebUser(user);
-                data.put("user", weChatUser);
-                result = Result.retOk(data);
-            } catch (Exception e) {
-                result = Result.retFail(e.getMessage());
+        try {
+            WebUser user = webUserMapper.findWebUserByAccount(account);
+            if (user == null || !user.getPassword().equals(password)) {
+                result = Result.retFail("管理员信息不存在");
+                return result;
             }
+            //查找该管理员是否被绑定过
+            WeChatUser hasBind = weChatUserMapper.findWeChatUserByWebUserId(user.getId());
+            if (hasBind != null) {
+                result = Result.retFail("该管理员已被绑定");
+                return result;
+            }
+            WeChatUser weChatUser = weChatUserMapper.findWeChatUserByOpenId(openId);
+            if (weChatUser == null) {
+                result = Result.retFail("openid有误，请先登录");
+                return result;
+            }
+            weChatUser.setStatus(UserStatus.TEACHER.ordinal());
+            weChatUser.setWebUserId(user.getId());
+            weChatUser.setOpenId(openId);
+            weChatUserMapper.updateWeChatUserByOpenId(weChatUser);
+            this.getAdminClasses(user);
+            Map<String, Object> data = new HashMap<>(1);
+            weChatUser.setWebUser(user);
+            data.put("user", weChatUser);
+            result = Result.retOk(data);
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
         }
+
         return result;
     }
 
@@ -189,6 +207,28 @@ public class UserServiceImpl implements UserService {
         } else {
             weChatUserMapper.updateStudentInfo(studentInfo);
             result = Result.retOk("success");
+        }
+        return result;
+    }
+
+    @Override
+    public Result deleteBindInfo(String openId) {
+        Result result;
+        try {
+            WeChatUser user = weChatUserMapper.findWeChatUserByOpenId(openId);
+            if (user == null) {
+                result = Result.retFail("openid有误");
+            } else {
+                user.setWebUserId(0L);
+                user.setStudentId(0L);
+                user.setStatus(UserStatus.UNBIND.getCode());
+                weChatUserMapper.updateWeChatUserByOpenId(user);
+                Map<String, Object> data = new HashMap<>();
+                data.put("user", user);
+                result = Result.retOk(data);
+            }
+        } catch (Exception e) {
+            result = Result.retFail(e.getMessage());
         }
         return result;
     }
