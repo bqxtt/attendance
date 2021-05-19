@@ -86,15 +86,16 @@ public class UserServiceImpl implements UserService {
         } else {
             webUserMapper.updateWebUser(user);
             List<Long> classIds = user.getClassIds();
-            webUserMapper.deleteWebUserManagements(user.getId());
-            if (classIds != null && classIds.size() > 0) {
-                webUserMapper.addWebUserManagements(user.getId(), classIds);
-                List<Class> classes = schoolMapper.findClassesByIds(classIds);
-                user.setClasses(classes);
-                user.setClassIds(classIds);
+            if (classIds != null) {
+                webUserMapper.deleteWebUserManagements(user.getId());
+                if (classIds.size() > 0) {
+                    webUserMapper.addWebUserManagements(user.getId(), classIds);
+                }
             }
+            WebUser webUser = webUserMapper.findWebUserByWebUserId(user.getId());
+            this.getAdminClasses(webUser);
             Map<String, Object> data = new HashMap<>(1);
-            data.put("user", user);
+            data.put("user", webUser);
             result = Result.retOk(data);
         }
         return result;
