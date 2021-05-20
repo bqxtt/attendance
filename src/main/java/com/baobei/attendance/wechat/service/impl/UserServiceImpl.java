@@ -181,6 +181,9 @@ public class UserServiceImpl implements UserService {
             Integer status = user.getStatus();
             if (status.equals(UserStatus.STUDENT.getCode())) {
                 Student student = weChatUserMapper.findStudentByStudentId(user.getStudentId());
+                if (student == null) {
+                    return this.deleteBindInfo(user.getOpenId());
+                }
                 Class clazz = schoolMapper.findClassById(student.getClassId());
                 Dormitory dormitory = dormitoryMapper.findDormitoryById(student.getDormitoryId());
                 student.setAClass(clazz);
@@ -188,6 +191,9 @@ public class UserServiceImpl implements UserService {
                 user.setStudent(student);
             } else if (status.equals(UserStatus.TEACHER.getCode())) {
                 WebUser teacher = webUserMapper.findWebUserByWebUserId(user.getWebUserId());
+                if (teacher == null) {
+                    return this.deleteBindInfo(user.getOpenId());
+                }
                 this.getAdminClasses(teacher);
                 user.setWebUser(teacher);
             }
